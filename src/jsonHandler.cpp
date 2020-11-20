@@ -1,47 +1,59 @@
 #include <ArduinoJson.h>
 
 struct Function{
-    char pinMode;
+    char* pinMode;
     bool isAnalog;
     bool isPWM;
     int values[];
     char mqttCmds[];
     
     Function(){
-        pinMode = "OUTPUT";
+        pinMode = "default";
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
         mqttCmds[0] = 0;
         mqttCmds[1] = 1;
-    }
+    };
 
 
-    Function(char pinMode){
+    Function(char* pinMode){
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
         mqttCmds[0] = 0;
         mqttCmds[1] = 1;
-    }
+    };
 
     Function(char pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
 };
 
+Function functions[] = {Function(), Function("Input")};
+
 struct Port{
-  char pin;
+  char* pin;
   Function type;
 
   Port(char* port, int function){
-    pin = char(port);
+    pin = port;
     type = functions[function];
   };
 };
 
-Function functions[] = {Function(), Function((char)"Input")};
 Port configuredPorts[] = {};
+
+int getPosition(Function p){
+    int posiition;
+    for (int i=0; i<sizeof(functions); i++) {
+        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds) {
+            posiition = i;
+            break;
+        }
+    }
+    return 0;
+}
 
 void parsePorts(String rawJSON){
     const size_t capacity = JSON_ARRAY_SIZE(64) + JSON_OBJECT_SIZE(1) + 64*JSON_OBJECT_SIZE(2) + 40;
@@ -70,19 +82,10 @@ String encodePorts(){
 
     for (int i = 0; i < 64; i++)
     {
-        ports[i]["port"]=configuredPorts[i].pin;
+        ports[i]["port"]= configuredPorts[i].pin;
         ports[i]["function"]= getPosition(configuredPorts[i].type);
     }
     serializeJson(doc, Serial);
-}
-
-int getPosition(Function p){
-    int posiition;
-    for (int i=0; i<sizeof(functions); i++) {
-        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds) {
-            posiition = i;
-            break;
-        }
-    }
+    return "";
 }
 

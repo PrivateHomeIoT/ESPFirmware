@@ -9,17 +9,16 @@
 const char* ssid;
 const char* password;
 
-Port configuredPorts[] = {};
-
 bool firstBoot(){
     LittleFS.begin();
-    File s = LittleFS.open("/ssid.txt", "r");
-    if (s){
+    File st = LittleFS.open("/start.txt", "r");
+    if (st){
+        File s = LittleFS.open("/start.txt", "r");
         ssid = s.readString().c_str();
         File p = LittleFS.open("/pass.txt", "r");
         if (p) password = s.readString().c_str();
         File g = LittleFS.open("/ports.txt", "r");
-        parsePorts(g.readString);
+        if (g) parsePorts(g.readString().c_str());
         return false;
         }
     return true;
