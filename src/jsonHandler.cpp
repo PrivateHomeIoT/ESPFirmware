@@ -45,11 +45,9 @@ struct Port{
 Port configuredPorts[] = {};
 
 int getPosition(Function p){
-    int posiition;
     for (int i=0; i<sizeof(functions); i++) {
         if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds) {
-            posiition = i;
-            break;
+            return i;
         }
     }
     return 0;
@@ -60,13 +58,14 @@ void parsePorts(String rawJSON){
     DynamicJsonDocument doc(capacity);
     deserializeJson(doc, rawJSON);
     JsonArray ports = doc["ports"];
-    int next;
+    int next = 0;
 
     for (int i = 0; i < 64; i++){
         if(ports[i]["port"]!= "" ){
-            configuredPorts[i].pin = ports[i]["port"];
-            configuredPorts[i].type = functions[int(ports[i]["function"])];
-        }else next = i;
+            configuredPorts[next].pin = ports[i]["port"];
+            configuredPorts[next].type = functions[int(ports[i]["function"])];
+            next ++;
+        }
     }
 }
 
@@ -85,7 +84,8 @@ String encodePorts(){
         ports[i]["port"]= configuredPorts[i].pin;
         ports[i]["function"]= getPosition(configuredPorts[i].type);
     }
-    serializeJson(doc, Serial);
-    return "";
+    String result;
+    serializeJson(doc, result);
+    return result;
 }
 
