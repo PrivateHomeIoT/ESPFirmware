@@ -13,14 +13,14 @@ struct Function{
     char mqttCmds[];
     
     Function(){
-        pinMode = "OUTPUT";
+        pinMode = "default";
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
         mqttCmds[0] = 0;
         mqttCmds[1] = 1;
-    }
+    };
 
 
     Function(char* pinMode){
@@ -30,7 +30,7 @@ struct Function{
         values[1] = 1;
         mqttCmds[0] = 0;
         mqttCmds[1] = 1;
-    }
+    };
 
     Function(char* pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
 };
@@ -49,18 +49,28 @@ struct Port{
 
 Port configuredPorts[] = {};
 
+int getPosition(Function p){
+    for (int i=0; i<sizeof(functions); i++) {
+        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds) {
+            return i;
+        }
+    }
+    return 0;
+}
+
 void parsePorts(String rawJSON){
     const size_t capacity = JSON_ARRAY_SIZE(64) + JSON_OBJECT_SIZE(1) + 64*JSON_OBJECT_SIZE(2) + 40;
     DynamicJsonDocument doc(capacity);
     deserializeJson(doc, rawJSON);
     JsonArray ports = doc["ports"];
-    int next;
+    int next = 0;
 
     for (int i = 0; i < 64; i++){
         if(ports[i]["port"]!= "" ){
-            configuredPorts[i].pin = ports[i]["port"];
-            configuredPorts[i].type = functions[int(ports[i]["function"])];
-        }else next = i;
+            configuredPorts[next].pin = ports[i]["port"];
+            configuredPorts[next].type = functions[int(ports[i]["function"])];
+            next ++;
+        }
     }
 }
 
@@ -76,20 +86,12 @@ String encodePorts(){
 
     for (int i = 0; i < 64; i++)
     {
-        ports[i]["port"]=configuredPorts[i].pin;
+        ports[i]["port"]= configuredPorts[i].pin;
         ports[i]["function"]= getPosition(configuredPorts[i].type);
     }
-    serializeJson(doc, Serial);
-}
-
-int getPosition(Function p){
-    int posiition;
-    for (int i=0; i<sizeof(functions); i++) {
-        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds) {
-            posiition = i;
-            break;
-        }
-    }
+    String result;
+    serializeJson(doc, result);
+    return result;
 }
 
 void loadData(){
