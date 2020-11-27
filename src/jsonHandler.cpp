@@ -1,7 +1,12 @@
+#include <Arduino.h>
 #include <ArduinoJson.h>
+#include <LittleFS.h>
+#include <EEPROM.h>
+#include "jsonHandler.h"
+#include "handleHttp.h"
 
 struct Function{
-    char pinMode;
+    char* pinMode;
     bool isAnalog;
     bool isPWM;
     int values[];
@@ -18,7 +23,7 @@ struct Function{
     }
 
 
-    Function(char pinMode){
+    Function(char* pinMode){
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
@@ -27,20 +32,21 @@ struct Function{
         mqttCmds[1] = 1;
     }
 
-    Function(char pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
+    Function(char* pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
 };
 
+Function functions[] = {Function(), Function("Input")};
+
 struct Port{
-  char pin;
+  char* pin;
   Function type;
 
   Port(char* port, int function){
-    pin = char(port);
+    pin = port;
     type = functions[function];
   };
 };
 
-Function functions[] = {Function(), Function((char)"Input")};
 Port configuredPorts[] = {};
 
 void parsePorts(String rawJSON){
@@ -86,3 +92,34 @@ int getPosition(Function p){
     }
 }
 
+void loadData(){
+    EEPROM.begin(512);
+    EEPROM.get(0, ssid);
+    EEPROM.get(0 + sizeof(ssid), password);
+    char ok[2 + 1];
+    EEPROM.get(0 + sizeof(ssid) + sizeof(password), ok);
+    EEPROM.end();
+    if (String(ok) != String("OK")) {
+        ssid[0] = 0;
+        password[0] = 0;
+        firstBoot = true;
+    }
+    Serial.println("Recovered credentials:");
+    Serial.println(ssid);
+    Serial.println(strlen(password) > 0 ? "********" : "<no password>");
+    LittleFS.begin();
+    File g = LittleFS.open("/ports.txt", "r");
+    if(g) parsePorts(g.readString());
+    Serial.println("Finished loading data")
+}
+
+void saveData() {
+    EEPROM.begin(512);
+    EEPROM.put(0, ssid);
+    EEPROM.put(0 + sizeof(ssid), password);
+    char ok[2 + 1] = "OK";
+    EEPROM.put(0 + sizeof(ssid) + sizeof(password), ok);
+    EEPROM.commit();
+    EEPROM.end();
+    Serial.println("Saved wifi credentials");
+}
