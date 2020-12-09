@@ -10,8 +10,8 @@
 #include "jsonHandler.h"
 
 #ifndef APSSID
-#define APSSID "ESP_ap"
-#define APPSK  "12345678"
+#define APSSID "PrivateIoTSETUP"
+#define APPSK  "privatehome"
 #endif
 
 char ssid[33] = "";
@@ -90,10 +90,10 @@ void loop(){
             /* Don't set retry time too low as retry interfere the softAP operation */
             connect = true;
             }
-        if (WiFi.status != s) { // WLAN status change
+        if (WiFi.status() != s) { // WLAN status change
             Serial.print("Status: ");
             Serial.println(s);
-            status = s;
+            int status = s;
             if (s == WL_CONNECTED) {
                 /* Just connected to WLAN */
                 Serial.println("");
