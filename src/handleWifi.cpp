@@ -13,8 +13,6 @@
 
 char ssid[33] = "";
 char password[65] = "";
-// IPAddress apIP(172, 217, 28, 1);
-// IPAddress netMsk(255, 255, 255, 0);
 WiFiClient espClient;
 DNSServer dnsServer;
 
@@ -72,7 +70,6 @@ void wifiLoop()
         { // WLAN status change
             Serial.print("Status: ");
             Serial.println(s);
-            int status = s;
             if (s == WL_CONNECTED)
             {
                 /* Just connected to WLAN */

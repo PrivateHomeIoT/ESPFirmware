@@ -15,6 +15,7 @@ extern DNSServer dnsServer;
 extern const char *softAP_ssid;
 extern const char *softAP_password;
 extern const char *myHostname;
+
 void connectWifi();
 void wifiSetup();
 void wifiLoop();

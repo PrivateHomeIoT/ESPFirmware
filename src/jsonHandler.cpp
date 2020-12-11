@@ -16,7 +16,7 @@ struct Function
 
     Function()
     {
-        pinMode = "default";
+        pinMode = (char*) "default";
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
@@ -38,7 +38,7 @@ struct Function
     Function(char *pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
 };
 
-Function functions[] = {Function(), Function("Input")};
+Function functions[] = {Function(), Function((char*)"Input")};
 
 struct Port
 {
