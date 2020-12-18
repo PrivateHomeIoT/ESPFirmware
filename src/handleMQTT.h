@@ -5,7 +5,7 @@
 #include "handleWifi.h"
 
 extern char* mqtt_server;
-extern PubSubClient client(espClient);
+PubSubClient client(espClient);
 
 void loopMQTT();
 void setupMQTT();

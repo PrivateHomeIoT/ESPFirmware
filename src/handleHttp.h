@@ -5,8 +5,8 @@
 #include <DNSServer.h>
 #include <Arduino.h>
 
-extern ESP8266WebServer server(80);
-extern IPAddress serverIP(0,0,0,0);
+ESP8266WebServer server(80);
+IPAddress serverIP(0,0,0,0);
 
 boolean captivePortal();
 void handleWifi();

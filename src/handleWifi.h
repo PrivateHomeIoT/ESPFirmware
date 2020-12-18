@@ -8,8 +8,8 @@
 
 extern char ssid[33];
 extern char password[65];
-extern IPAddress apIP(172, 217, 28, 1);  
-extern IPAddress netMsk(255, 255, 255, 0);
+IPAddress apIP(172, 217, 28, 1);   
+IPAddress netMsk(255, 255, 255, 0);
 extern WiFiClient espClient;
 extern DNSServer dnsServer;
 extern const char *softAP_ssid;
