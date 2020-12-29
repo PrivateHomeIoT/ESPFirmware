@@ -5,6 +5,9 @@
 #include "handleHttp.h"
 #include "ESPFirmware.ino"
 
+ESP8266WebServer server(80);
+IPAddress serverIP(0,0,0,0);
+
 void httpSetup()
 {
   server.on("/", handleRoot);

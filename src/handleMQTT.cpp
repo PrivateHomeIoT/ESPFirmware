@@ -11,6 +11,7 @@ char msg[MSG_BUFFER_SIZE];
 int value = 0;
 //char* topic;
 String clientId;
+PubSubClient client(espClient);
 
 void connectMQTT() {
   // Loop until we're reconnected

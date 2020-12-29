@@ -1,11 +1,11 @@
 #ifndef handleMQTT_h
 #define handleMQTT_h
+
 #include <PubSubClient.h>
-#include <Arduino.h>
-#include "handleWifi.h"
 
 extern char* mqtt_server;
-PubSubClient client(espClient);
+
+extern PubSubClient client;
 
 void loopMQTT();
 void setupMQTT();

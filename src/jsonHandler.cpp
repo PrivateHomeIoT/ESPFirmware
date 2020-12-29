@@ -11,8 +11,8 @@ struct Function
     char *pinMode;
     bool isAnalog;
     bool isPWM;
-    int values[];
-    char mqttCmds[];
+    int values[20];
+    char mqttCmds[20];
 
     Function()
     {
@@ -52,7 +52,7 @@ struct Port
     };
 };
 
-Port configuredPorts[] = {};
+Port* configuredPorts;
 
 int getPosition(Function p)
 {
