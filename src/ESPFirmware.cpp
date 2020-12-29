@@ -1,13 +1,9 @@
 #include "handleHttp.h"
-#include "jsonHandler.h"
+#include "handleJSON.h"
 #include "handleMQTT.h"
 #include "handleWifi.h"
 
 #define BLOCK_SIZE 16
-
-char *key;
-bool firstBoot = false;
-boolean connect;
 
 void setup()
 {

@@ -3,7 +3,8 @@
 #include <DNSServer.h>
 #include <Arduino.h>
 #include "handleHttp.h"
-#include "ESPFirmware.ino"
+#include "handleWifi.h"
+#include "handleJSON.h"
 
 ESP8266WebServer server(80);
 IPAddress serverIP(0,0,0,0);

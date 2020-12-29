@@ -2,9 +2,8 @@
 #include <Arduino_Json.h>
 #include <LittleFS.h>
 #include <EEPROM.h>
-#include "jsonHandler.h"
+#include "handleJSON.h"
 #include "handleHttp.h"
-#include "ESPFirmware.ino"
 
 struct Function
 {

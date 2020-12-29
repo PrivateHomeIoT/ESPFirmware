@@ -10,6 +10,9 @@ extern char password[65];
 extern const char *softAP_ssid;
 extern const char *softAP_password;
 extern const char *myHostname;
+extern char *key;
+extern bool firstBoot;
+extern boolean connect;
 
 extern IPAddress apIP;   
 extern IPAddress netMsk;

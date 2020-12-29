@@ -3,8 +3,9 @@
 #include <ESP8266mDNS.h>
 #include <DNSServer.h>
 #include <Arduino.h>
+#include "handleHttp.h"
 #include "handleWifi.h"
-#include "ESPFirmware.ino"
+#include "handleJSON.h"
 
 #ifndef APSSID
 #define APSSID "PrivateIoTSETUP"
@@ -23,6 +24,9 @@ const char *softAP_password = APPSK;
 const char *myHostname = "esp8266";
 const byte DNS_PORT = 53;
 unsigned long lastConnectTry = 0;
+char *key;
+bool firstBoot = false;
+boolean connect;
 
 void connectWifi()
 {

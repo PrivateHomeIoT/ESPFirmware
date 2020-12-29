@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "handleMQTT.h"
 #include "handleWifi.h"
-#include "ESPFirmware.ino"
 
 char* mqtt_server = (char*) "broker.mqtt-dashboard.com";
 unsigned long lastMsg = 0;
