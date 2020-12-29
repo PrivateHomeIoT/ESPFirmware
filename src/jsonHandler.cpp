@@ -94,7 +94,7 @@ String encodePorts()
         ports[i]["port"] = configuredPorts[i].pin;
         ports[i]["function"] = getPosition(configuredPorts[i].type);
     }
-    return ports.stringify();
+    return JSON.stringify(ports);
 }
 
 void loadData()
