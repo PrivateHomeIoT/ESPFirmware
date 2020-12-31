@@ -2,13 +2,13 @@
 #include <Arduino.h>
 #include "handleMQTT.h"
 #include "handleWifi.h"
+#include "handleEncryption.h"
 
 char* mqtt_server = (char*) "broker.mqtt-dashboard.com";
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE	(50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
-//char* topic;
 String clientId;
 PubSubClient client(espClient);
 
