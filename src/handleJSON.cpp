@@ -4,7 +4,67 @@
 #include <EEPROM.h>
 #include "handleJSON.h"
 #include "handleHttp.h"
-#include "handlePorts.h"
+
+struct Function
+{
+    char *pinMode;
+    bool isAnalog;
+    bool isPWM;
+    int values[20];
+    char mqttCmds[20];
+
+    Function()
+    {
+        pinMode = (char*) "default";
+        isPWM = false;
+        isAnalog = false;
+        values[0] = 0;
+        values[1] = 1;
+        mqttCmds[0] = 0;
+        mqttCmds[1] = 1;
+    };
+
+    Function(char *pinMode)
+    {
+        isPWM = false;
+        isAnalog = false;
+        values[0] = 0;
+        values[1] = 1;
+        mqttCmds[0] = 0;
+        mqttCmds[1] = 1;
+    };
+
+    Function(char *pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
+};
+
+Function functions[] = {Function(), Function((char*)"Input")};
+
+struct Port
+{
+    int pin;
+    Function type;
+
+    Port(int port, int function)
+    {
+        pin = port;
+        type = functions[function];
+    };
+};
+
+Port* configuredPorts;
+
+int getPosition(Function p)
+{
+    // for (int i = 0; i < sizeof(functions); i++)
+    for (int i = 0; i < 2; i++)
+    {
+        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds)
+        {
+            return i;
+        }
+    }
+    return 0;
+}
 
 void parsePorts(String rawJSON)
 {

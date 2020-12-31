@@ -1,12 +1,21 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
+<<<<<<< HEAD
 #include "handleEncryption.h"
 #include "configuration.h"
+=======
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE	(50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
+<<<<<<< HEAD
+=======
+//char* topic;
+String clientId;
+PubSubClient client(espClient);
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
 void connectMQTT() {
   // Loop until we're reconnected
