@@ -3,6 +3,7 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 #include "handleEncryption.h"
+#include "configuration.h"
 
 void setup()
 {

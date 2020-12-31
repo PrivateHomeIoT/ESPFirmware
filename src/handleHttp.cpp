@@ -1,13 +1,7 @@
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <DNSServer.h>
-#include <Arduino.h>
 #include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleJSON.h"
-
-ESP8266WebServer server(80);
-IPAddress serverIP(0,0,0,0);
+#include "configuration.h"
 
 void httpSetup()
 {
@@ -155,7 +149,7 @@ void handleWifi()
       "<input type='text' placeholder='network' name='n'/>"
       "<br /><input type='password' placeholder='password' name='p'/>"
       "<br /><input type='text' placeholder='IP adress of the PrivateHome-server' name='s'/>"
-      "<br /><input type='text' placeholder='encryption key' name='k'/>"
+      "<br /><input type='password' placeholder='encryption key' name='k'/>"
       "<br /><input type='submit' value='Connect/Disconnect'/></form>"
       "<p>You may want to <a href='/'>return to the home page</a>.</p>"
       "</body></html>");
