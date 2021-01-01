@@ -3,9 +3,12 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #include "handleEncryption.h"
 >>>>>>> parent of 7cf6583... implemented configuration.h
+=======
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
 char* mqtt_server = (char*) "broker.mqtt-dashboard.com";
 unsigned long lastMsg = 0;
@@ -13,9 +16,13 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 //char* topic;
 =======
 >>>>>>> parent of 7cf6583... implemented configuration.h
+=======
+//char* topic;
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 String clientId;
 PubSubClient client(espClient);
 
