@@ -1,8 +1,11 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "handleEncryption.h"
 #include "configuration.h"
+=======
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 =======
 >>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
@@ -11,7 +14,10 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 //char* topic;
 String clientId;
 PubSubClient client(espClient);

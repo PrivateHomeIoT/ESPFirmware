@@ -3,8 +3,13 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "handleEncryption.h"
 #include "configuration.h"
+=======
+
+#define BLOCK_SIZE 16
+>>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 =======
 
 #define BLOCK_SIZE 16
