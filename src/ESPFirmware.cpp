@@ -2,6 +2,7 @@
 #include "handleJSON.h"
 #include "handleMQTT.h"
 #include "handleWifi.h"
+<<<<<<< HEAD
 
 #define BLOCK_SIZE 16
 
