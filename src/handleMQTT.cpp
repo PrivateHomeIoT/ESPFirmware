@@ -3,6 +3,7 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #include "handleEncryption.h"
 >>>>>>> parent of 7cf6583... implemented configuration.h
@@ -12,6 +13,7 @@ unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE	(50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
+<<<<<<< HEAD
 <<<<<<< HEAD
 //char* topic;
 =======
