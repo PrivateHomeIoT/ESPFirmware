@@ -3,74 +3,13 @@
 #include <LittleFS.h>
 #include <EEPROM.h>
 #include "handleJSON.h"
+#include "handlePorts.h"
 #include "handleHttp.h"
-
-struct Function
-{
-    char *pinMode;
-    bool isAnalog;
-    bool isPWM;
-    int values[20];
-    char mqttCmds[20];
-
-    Function()
-    {
-        pinMode = (char*) "default";
-        isPWM = false;
-        isAnalog = false;
-        values[0] = 0;
-        values[1] = 1;
-        mqttCmds[0] = 0;
-        mqttCmds[1] = 1;
-    };
-
-    Function(char *pinMode)
-    {
-        isPWM = false;
-        isAnalog = false;
-        values[0] = 0;
-        values[1] = 1;
-        mqttCmds[0] = 0;
-        mqttCmds[1] = 1;
-    };
-
-    Function(char *pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
-};
-
-Function functions[] = {Function(), Function((char*)"Input")};
-
-struct Port
-{
-    int pin;
-    Function type;
-
-    Port(int port, int function)
-    {
-        pin = port;
-        type = functions[function];
-    };
-};
-
-Port* configuredPorts;
-
-int getPosition(Function p)
-{
-    // for (int i = 0; i < sizeof(functions); i++)
-    for (int i = 0; i < 2; i++)
-    {
-        if (p.pinMode == functions[i].pinMode && p.isAnalog == functions[i].isAnalog && p.isPWM == functions[i].isPWM && p.values == functions[i].values && p.mqttCmds == functions[i].mqttCmds)
-        {
-            return i;
-        }
-    }
-    return 0;
-}
 
 void parsePorts(String rawJSON)
 {
     JSONVar ports = JSON.parse(rawJSON)["ports"];
     int next = 0;
-
     for (int i = 0; i < 64; i++)
     {
         if (ports[i]["port"] != "")
@@ -81,13 +20,11 @@ void parsePorts(String rawJSON)
         }
     }
 }
-
 String encodePorts()
 {
     JSONVar ports;
     ports[0]["port"] = 1;
     ports[0]["function"] = 1;
-
     for (int i = 0; i < 64; i++)
     {
         ports[i]["port"] = configuredPorts[i].pin;
@@ -95,7 +32,6 @@ String encodePorts()
     }
     return JSON.stringify(ports);
 }
-
 void loadData()
 {
     EEPROM.begin(512);
@@ -119,7 +55,6 @@ void loadData()
         parsePorts(g.readString());
     Serial.println("Finished loading data");
 }
-
 void saveData()
 {
     EEPROM.begin(512);

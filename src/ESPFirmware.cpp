@@ -1,18 +1,8 @@
-#include "handleHttp.h"
 #include "handleJSON.h"
 #include "handleMQTT.h"
 #include "handleWifi.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-#define BLOCK_SIZE 16
-=======
+#include "handleHttp.h"
 #include "handleEncryption.h"
->>>>>>> parent of 7cf6583... implemented configuration.h
-=======
-
-#define BLOCK_SIZE 16
->>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
 void setup()
 {
@@ -22,7 +12,6 @@ void setup()
     wifiSetup();
     httpSetup();
 }
-
 void loop()
 {
     wifiLoop();

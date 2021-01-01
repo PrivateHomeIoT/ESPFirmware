@@ -1,28 +1,13 @@
-#include <PubSubClient.h>
 #include <Arduino.h>
 #include "handleMQTT.h"
 #include "handleWifi.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 #include "handleEncryption.h"
->>>>>>> parent of 7cf6583... implemented configuration.h
-=======
->>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 
 char* mqtt_server = (char*) "broker.mqtt-dashboard.com";
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE	(50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-//char* topic;
-=======
->>>>>>> parent of 7cf6583... implemented configuration.h
-=======
-//char* topic;
->>>>>>> parent of c80bff1... Outsourced Ports and Encryption
 String clientId;
 PubSubClient client(espClient);
 
@@ -49,7 +34,6 @@ void connectMQTT() {
     }
   }
 }
-
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -58,7 +42,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
     //digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
@@ -67,14 +50,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   } else {
     //digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
   }
-
 }
-
 void loopMQTT() {
   if (!client.connected()) connectMQTT();
   client.loop();
 }
-
 void setupMQTT(){
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);

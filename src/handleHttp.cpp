@@ -8,7 +8,6 @@
 
 ESP8266WebServer server(80);
 IPAddress serverIP(0,0,0,0);
-
 void httpSetup()
 {
   server.on("/", handleRoot);
@@ -20,7 +19,6 @@ void httpSetup()
   server.begin(); // Web server start
   Serial.println("HTTP server started");
 }
-
 boolean isIp(String str)
 {
   for (size_t i = 0; i < str.length(); i++)
@@ -33,7 +31,6 @@ boolean isIp(String str)
   }
   return true;
 }
-
 /** IP to String? */
 String toStringIp(IPAddress ip)
 {
@@ -45,7 +42,6 @@ String toStringIp(IPAddress ip)
   res += String(((ip >> 8 * 3)) & 0xFF);
   return res;
 }
-
 /** Handle root or redirect to captive portal */
 void handleRoot()
 {
@@ -56,7 +52,6 @@ void handleRoot()
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
   server.sendHeader("Expires", "-1");
-
   String Page;
   Page += F(
       "<!DOCTYPE html><html lang='en'><head>"
@@ -74,10 +69,8 @@ void handleRoot()
   Page += F(
       "<p>You may want to <a href='/wifi'>config the wifi connection</a>.</p>"
       "</body></html>");
-
   server.send(200, "text/html", Page);
 }
-
 /** Redirect to captive portal if we got a request for another domain. Return true in that case so the page handler do not try to handle the request again. */
 boolean captivePortal()
 {
@@ -91,14 +84,12 @@ boolean captivePortal()
   }
   return false;
 }
-
 /** Wifi config page handler */
 void handleWifi()
 {
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
   server.sendHeader("Expires", "-1");
-
   String Page;
   Page += F(
       "<!DOCTYPE html><html lang='en'><head>"
@@ -162,7 +153,6 @@ void handleWifi()
   server.send(200, "text/html", Page);
   server.client().stop(); // Stop is needed because we sent no content length
 }
-
 /** Handle the WLAN save form and redirect to WLAN config page again */
 void handleWifiSave()
 {
@@ -180,7 +170,6 @@ void handleWifiSave()
   saveData();
   connect = strlen(ssid) > 0; // Request WLAN connect with new credentials if there is a SSID
 }
-
 void handleNotFound()
 {
   if (captivePortal())
@@ -195,7 +184,6 @@ void handleNotFound()
   message += F("\nArguments: ");
   message += server.args();
   message += F("\n");
-
   for (uint8_t i = 0; i < server.args(); i++)
   {
     message += String(F(" ")) + server.argName(i) + F(": ") + server.arg(i) + F("\n");

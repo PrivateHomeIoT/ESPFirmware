@@ -37,7 +37,6 @@ void connectWifi()
     Serial.print("connRes: ");
     Serial.println(connRes);
 }
-
 void wifiSetup()
 {
     Serial.println("Configuring access point...");
@@ -46,15 +45,12 @@ void wifiSetup()
     delay(500); // Without delay I've seen the IP address blank
     Serial.print("AP IP address: ");
     Serial.println(WiFi.softAPIP());
-
     /* Setup the DNS server redirecting all the domains to the apIP */
     dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
     dnsServer.start(DNS_PORT, "*", apIP);
-
     loadData(); // Load WLAN credentials from network
     connect = strlen(ssid) > 0;
 }
-
 void wifiLoop()
 {
     if (connect)
@@ -84,7 +80,6 @@ void wifiLoop()
                 Serial.println(ssid);
                 Serial.print("IP address: ");
                 Serial.println(WiFi.localIP());
-
                 // Setup MDNS responder
                 if (!MDNS.begin(myHostname))
                 {
