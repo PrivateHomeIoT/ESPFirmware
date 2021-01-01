@@ -3,6 +3,7 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #define BLOCK_SIZE 16
 =======
