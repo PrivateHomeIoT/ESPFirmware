@@ -1,10 +1,30 @@
+#include <ESP8266WiFi.h>
 #include <WiFiClient.h>
+#include <ESP8266mDNS.h>
+#include <DNSServer.h>
+#include <Arduino.h>
 #include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleJSON.h"
-#include "configuration.h"
 
+#ifndef APSSID
+#define APSSID "PrivateIoTSETUP"
+#define APPSK "privatehome"
+#endif
+
+char ssid[33] = "";
+char password[65] = "";
+WiFiClient espClient;
+DNSServer dnsServer;
+IPAddress apIP(172, 217, 28, 1);
+IPAddress netMsk(255, 255, 255, 0);
+
+const char *softAP_ssid = APSSID;
+const char *softAP_password = APPSK;
+const char *myHostname = "esp8266";
+const byte DNS_PORT = 53;
 unsigned long lastConnectTry = 0;
+char *key;
 bool firstBoot = false;
 boolean connect;
 
