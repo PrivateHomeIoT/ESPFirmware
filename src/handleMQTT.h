@@ -3,8 +3,6 @@
 
 #include <PubSubClient.h>
 
-// PubSubClient client(espClient);
-
 extern PubSubClient client;
 
 void loopMQTT();

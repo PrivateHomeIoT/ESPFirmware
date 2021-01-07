@@ -51,8 +51,7 @@ void wifiSetup()
     loadData(); // Load WLAN credentials from network
     connect = strlen(ssid) > 0;
 }
-void wifiLoop()
-{
+void wifiLoop(){
     if (connect)
     {
         Serial.println("Connect requested");
