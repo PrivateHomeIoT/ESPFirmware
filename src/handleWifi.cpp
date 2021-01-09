@@ -24,7 +24,6 @@ const char *softAP_password = APPSK;
 const char *myHostname = "esp8266";
 const byte DNS_PORT = 53;
 unsigned long lastConnectTry = 0;
-char *key;
 bool firstBoot = false;
 boolean connect;
 

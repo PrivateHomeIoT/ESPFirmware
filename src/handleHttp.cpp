@@ -5,11 +5,11 @@
 #include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleJSON.h"
+#include "handleEncryption.h"
 
 ESP8266WebServer server(80);
 IPAddress serverIP(0,0,0,0);
-void httpSetup()
-{
+void httpSetup(){
   server.on("/", handleRoot);
   server.on("/wifi", handleWifi);
   server.on("/wifisave", handleWifiSave);
@@ -19,8 +19,8 @@ void httpSetup()
   server.begin(); // Web server start
   Serial.println("HTTP server started");
 }
-boolean isIp(String str)
-{
+
+boolean isIp(String str){
   for (size_t i = 0; i < str.length(); i++)
   {
     int c = str.charAt(i);
@@ -31,9 +31,9 @@ boolean isIp(String str)
   }
   return true;
 }
+
 /** IP to String? */
-String toStringIp(IPAddress ip)
-{
+String toStringIp(IPAddress ip){
   String res = "";
   for (int i = 0; i < 3; i++)
   {
@@ -42,9 +42,9 @@ String toStringIp(IPAddress ip)
   res += String(((ip >> 8 * 3)) & 0xFF);
   return res;
 }
+
 /** Handle root or redirect to captive portal */
-void handleRoot()
-{
+void handleRoot(){
   if (captivePortal())
   { // If caprive portal redirect instead of displaying the page.
     return;
@@ -71,9 +71,9 @@ void handleRoot()
       "</body></html>");
   server.send(200, "text/html", Page);
 }
+
 /** Redirect to captive portal if we got a request for another domain. Return true in that case so the page handler do not try to handle the request again. */
-boolean captivePortal()
-{
+boolean captivePortal(){
   if (!isIp(server.hostHeader()) && server.hostHeader() != (String(myHostname) + ".local"))
   {
     Serial.println("Request redirected to captive portal");
@@ -84,9 +84,9 @@ boolean captivePortal()
   }
   return false;
 }
+
 /** Wifi config page handler */
-void handleWifi()
-{
+void handleWifi(){
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
   server.sendHeader("Expires", "-1");
@@ -147,20 +147,26 @@ void handleWifi()
       "<br /><input type='password' placeholder='password' name='p'/>"
       "<br /><input type='text' placeholder='IP adress of the PrivateHome-server' name='s'/>"
       "<br /><input type='text' placeholder='encryption key' name='k'/>"
+      "<br /><input type='text' placeholder='IV' name='iv'/>"
       "<br /><input type='submit' value='Connect/Disconnect'/></form>"
       "<p>You may want to <a href='/'>return to the home page</a>.</p>"
       "</body></html>");
   server.send(200, "text/html", Page);
   server.client().stop(); // Stop is needed because we sent no content length
 }
+
 /** Handle the WLAN save form and redirect to WLAN config page again */
-void handleWifiSave()
-{
+void handleWifiSave(){
+  char* key;
+  char* iv;
   Serial.println("wifi save");
   server.arg("n").toCharArray(ssid, sizeof(ssid) - 1);
   server.arg("p").toCharArray(password, sizeof(password) - 1);
   serverIP.fromString(server.arg("s"));
   server.arg('k').toCharArray(key, sizeof(key) - 1);
+  server.arg('iv').toCharArray(iv, sizeof(iv) - 1);
+  for(int i = 0; i< sizeof(key); i++){ aes_key[i] = byte(key[i]);}
+  for(int i = 0; i< sizeof(iv); i++){ aes_iv[i] = byte(iv[i]);}
   server.sendHeader("Location", "wifi", true);
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
@@ -170,8 +176,8 @@ void handleWifiSave()
   saveData();
   connect = strlen(ssid) > 0; // Request WLAN connect with new credentials if there is a SSID
 }
-void handleNotFound()
-{
+
+void handleNotFound(){
   if (captivePortal())
   { // If caprive portal redirect instead of displaying the error page.
     return;
