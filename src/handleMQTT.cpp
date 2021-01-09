@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "handleMQTT.h"
 #include "handleWifi.h"
 #include "handleEncryption.h"
@@ -28,6 +27,7 @@ void connectMQTT() {
     }
   }
 }
+
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -37,11 +37,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
   msg = decrypt((char*)(payload));
+  topic = decrypt(topic);
 }
+
 void loopMQTT() {
   if (!client.connected()) connectMQTT();
   client.loop();
 }
+
 void setupMQTT(){
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);

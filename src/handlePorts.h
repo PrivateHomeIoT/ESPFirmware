@@ -1,6 +1,8 @@
 #ifndef handlePorts_h
 #define handlePorts_h
 
+#include <Arduino.h>
+
 struct Function
 {
     char *pinMode;
