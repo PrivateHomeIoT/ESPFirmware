@@ -1,6 +1,5 @@
 #include "handleWifi.h"
 #include "handleHttp.h"
-//#include <EasyOta.h>
 
 void setup(){
     delay(1000);
@@ -8,10 +7,8 @@ void setup(){
     Serial.println();
     wifiSetup();
     httpSetup();
-    //EasyOta.setup();
 }
 
 void loop(){
     wifiLoop();
-    //EasyOta.checkForUpload();
 }
