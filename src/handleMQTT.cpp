@@ -1,6 +1,7 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 #include "handleEncryption.h"
+#include "handlePorts.h"
 
 char* mqtt_server = (char*) "private.local";
 int mqtt_port = 1880;
@@ -38,6 +39,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
   msg = decrypt((char*)(payload));
   topic = decrypt(topic);
+  client.publish(encrypt(topic), encrypt(handlePort(msg, topic)));
 }
 
 void loopMQTT() {

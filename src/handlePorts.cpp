@@ -14,3 +14,18 @@ int getPosition(Function p){
     }
     return 0;
 } 
+
+char* handlePort (char* msg, char* topic){
+    Port actual = Port(-1,-1,(char*)"x");
+    for(int i=0; i<sizeof(configuredPorts); i++){
+        if(configuredPorts[i].topic == topic){
+            actual = configuredPorts[i];
+            break;
+        }
+    }
+    if (!(actual.type.isAnalog) && !(actual.type.isPWM) && actual.type.pinMode == (char*)"OUTPUT"){
+        if (msg == actual.type.mqttCmds[1]) digitalWrite(actual.pin,HIGH);
+        else if (msg == actual.type.mqttCmds[0]) digitalWrite(actual.pin,LOW);
+        return msg;
+    } else return "Function not defined";
+}

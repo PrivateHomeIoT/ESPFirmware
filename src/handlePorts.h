@@ -3,23 +3,22 @@
 
 #include <Arduino.h>
 
-struct Function
-{
+struct Function {
     char *pinMode;
     bool isAnalog;
     bool isPWM;
     int values[20];
-    char mqttCmds[20];
+    char* mqttCmds[20];
 
     Function()
     {
-        pinMode = (char*) "default";
+        pinMode = (char*) "OUTPUT";
         isPWM = false;
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
-        mqttCmds[0] = 0;
-        mqttCmds[1] = 1;
+        mqttCmds[0] = "0";
+        mqttCmds[1] = "1";
     };
 
     Function(char *pinMode)
@@ -28,8 +27,8 @@ struct Function
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
-        mqttCmds[0] = 0;
-        mqttCmds[1] = 1;
+        mqttCmds[0] = "0";
+        mqttCmds[1] = "1";
     };
 
     Function(char *pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
@@ -37,20 +36,23 @@ struct Function
 
 extern Function functions[];
 
-struct Port
-{
+struct Port {
     int pin;
     Function type;
+    char* topic;
 
-    Port(int port, int function)
+    Port(int port, int function, char* mqtt_topic)
     {
         pin = port;
         type = functions[function];
+        topic = mqtt_topic;
     };
 };
 
 extern Port* configuredPorts;
 
 int getPosition(Function p);
+
+char* handlePort(char* msg, char* topic);
 
 #endif
