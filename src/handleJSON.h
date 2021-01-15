@@ -7,5 +7,7 @@ extern bool firstBoot;
 
 void saveData();
 void loadData();
+void parsePorts(String rawJSON);
+String encodePorts();
 
 #endif

@@ -9,10 +9,8 @@
 void parsePorts(String rawJSON){
     JSONVar ports = JSON.parse(rawJSON)["ports"];
     int next = 0;
-    for (int i = 0; i < 64; i++)
-    {
-        if (ports[i]["port"] != "")
-        {
+    for (int i = 0; i < 64; i++){
+        if (ports[i]["port"] != ""){
             configuredPorts[next].pin = (int) ports[i]["port"];
             configuredPorts[next].type = functions[int(ports[i]["function"])];
             configuredPorts[next].topic = (char*) JSON.stringify(ports[i]["topic"]).c_str();

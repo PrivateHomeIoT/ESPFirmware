@@ -1,4 +1,6 @@
 #include "handlePorts.h"
+#include "handleWifi.h"
+#include "handleJSON.h"
 
 Function functions[] {Function(), Function((char*)"Input")};
 Port* configuredPorts;
@@ -16,6 +18,10 @@ int getPosition(Function p){
 } 
 
 char* handlePort (char* msg, char* topic){
+    if (topic = (char*)((String)myHostname + "/config").c_str()){
+        parsePorts(msg);
+    }
+    
     Port actual = Port(-1,-1,(char*)"x");
     for(int i=0; i<sizeof(configuredPorts); i++){
         if(configuredPorts[i].topic == topic){
