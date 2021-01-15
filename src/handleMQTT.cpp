@@ -16,7 +16,7 @@ void connectMQTT() {
     if (client.connect(myHostname)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish(((String)myHostname + "/1").c_str(), "online");
+      client.publish(encrypt((char*)((String)myHostname + "/1").c_str()), encrypt((char*)"online"));
       // ... and resubscribe
       client.subscribe(myHostname);
     } else {
