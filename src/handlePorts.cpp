@@ -18,12 +18,12 @@ int getPosition(Function p){
 } 
 
 char* handlePort (char* msg, char* topic){
-    if (topic = (char*)((String)myHostname + "/config").c_str()){
+    if (topic == (char*)((String)myHostname + "/config").c_str()){
         parsePorts(msg);
     }
     
     Port actual = Port(-1,-1,(char*)"x");
-    for(int i=0; i<sizeof(configuredPorts); i++){
+    for(uint i=0; i<sizeof(configuredPorts); i++){
         if(configuredPorts[i].topic == topic){
             actual = configuredPorts[i];
             break;
@@ -33,5 +33,5 @@ char* handlePort (char* msg, char* topic){
         if (msg == actual.type.mqttCmds[1]) digitalWrite(actual.pin,HIGH);
         else if (msg == actual.type.mqttCmds[0]) digitalWrite(actual.pin,LOW);
         return msg;
-    } else return "Function not defined";
+    } else return (char*)"Function not defined";
 }

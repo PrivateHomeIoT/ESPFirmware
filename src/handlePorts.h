@@ -17,8 +17,8 @@ struct Function {
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
-        mqttCmds[0] = "0";
-        mqttCmds[1] = "1";
+        mqttCmds[0] = (char*)"0";
+        mqttCmds[1] = (char*)"1";
     };
 
     Function(char *pinMode)
@@ -27,8 +27,8 @@ struct Function {
         isAnalog = false;
         values[0] = 0;
         values[1] = 1;
-        mqttCmds[0] = "0";
-        mqttCmds[1] = "1";
+        mqttCmds[0] = (char*)"0";
+        mqttCmds[1] = (char*)"1";
     };
 
     Function(char *pinMode, bool isAnalog, bool isPWM, int values[], char mqttCmds[]);
@@ -41,7 +41,7 @@ struct Port {
     Function type;
     char* topic;
 
-    Port(int port, int function, char* mqtt_topic)
+    Port(int port, uint function, char* mqtt_topic)
     {
         pin = port;
         type = functions[function];
