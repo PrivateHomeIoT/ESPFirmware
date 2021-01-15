@@ -6,8 +6,7 @@
 #include "handlePorts.h"
 #include "handleHttp.h"
 
-void parsePorts(String rawJSON)
-{
+void parsePorts(String rawJSON){
     JSONVar ports = JSON.parse(rawJSON)["ports"];
     int next = 0;
     for (int i = 0; i < 64; i++)
@@ -16,12 +15,13 @@ void parsePorts(String rawJSON)
         {
             configuredPorts[next].pin = (int) ports[i]["port"];
             configuredPorts[next].type = functions[int(ports[i]["function"])];
+            configuredPorts[next].topic = (char*) JSON.stringify(ports[i]["topic"]).c_str();
             next++;
         }
     }
 }
-String encodePorts()
-{
+
+String encodePorts(){
     JSONVar ports;
     ports[0]["port"] = 1;
     ports[0]["function"] = 1;
@@ -29,11 +29,12 @@ String encodePorts()
     {
         ports[i]["port"] = configuredPorts[i].pin;
         ports[i]["function"] = getPosition(configuredPorts[i].type);
+        ports[i]["topic"] = configuredPorts[i].topic;
     }
     return JSON.stringify(ports);
 }
-void loadData()
-{
+
+void loadData(){
     EEPROM.begin(512);
     EEPROM.get(0, ssid);
     EEPROM.get(0 + sizeof(ssid), password);
@@ -55,8 +56,8 @@ void loadData()
         parsePorts(g.readString());
     Serial.println("Finished loading data");
 }
-void saveData()
-{
+
+void saveData(){
     EEPROM.begin(512);
     EEPROM.put(0, ssid);
     EEPROM.put(0 + sizeof(ssid), password);

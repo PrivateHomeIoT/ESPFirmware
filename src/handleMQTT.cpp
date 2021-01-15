@@ -51,4 +51,5 @@ void setupMQTT(){
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
     connectMQTT();
+    client.publish(encrypt((char*)((String)myHostname + "/config").c_str()), myHostname);
 }
