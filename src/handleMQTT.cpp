@@ -4,7 +4,7 @@
 #include "handlePorts.h"
 
 char* mqtt_server = (char*) "private.local";
-int mqtt_port = 1880;
+int mqtt_port = 1500;
 char* msg;
 PubSubClient client(espClient);
 
