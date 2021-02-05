@@ -15,10 +15,11 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      // Once connected, publish an announcement...
-      client.publish(encrypt((char*)((String)myHostname + "/1").c_str()), encrypt((char*)"online"));
-      // ... and resubscribe
-      client.subscribe(myHostname);
+      // Once connected, publish an announcement
+      client.publish(encrypt((char*)((String)myHostname + "/status").c_str()), encrypt((char*)"online"));
+      client.subscribe(encrypt((char*)((String)myHostname + "/config").c_str()));
+      client.subscribe(encrypt((char*)myHostname));
+
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

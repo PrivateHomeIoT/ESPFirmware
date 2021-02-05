@@ -21,6 +21,7 @@ char* handlePort (char* msg, char* topic){
     if (topic == (char*)((String)myHostname + "/config").c_str()){
         parsePorts(msg);
         saveData();
+        ESP.restart();
         return msg;
     }
     

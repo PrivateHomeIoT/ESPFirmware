@@ -5,6 +5,9 @@
 #include "handleJSON.h"
 #include "handlePorts.h"
 #include "handleHttp.h"
+#include "handleWifi.h"
+#include "handleEncryption.h"
+#include "handleMQTT.h"
 
 void parsePorts(String rawJSON){
     JSONVar ports = JSON.parse(rawJSON)["ports"];
@@ -14,6 +17,7 @@ void parsePorts(String rawJSON){
             configuredPorts[next].pin = (int) ports[i]["port"];
             configuredPorts[next].type = functions[int(ports[i]["function"])];
             configuredPorts[next].topic = (char*) JSON.stringify(ports[i]["topic"]).c_str();
+            client.subscribe(encrypt((char*)((String)encrypt((char*)myHostname) + (String)encrypt(configuredPorts[next].topic)).c_str()));
             next++;
         }
     }
