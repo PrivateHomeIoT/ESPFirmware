@@ -6,11 +6,9 @@
 
 void setup(){
     delay(1000);
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
     Serial.begin(115200);
-    Serial.println();
     loadData();
+    //setupPorts(); --> handleConfig.h?
     wifiSetup();
     httpSetup();
     delay(500);

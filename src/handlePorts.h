@@ -4,13 +4,13 @@
 #include <Arduino.h>
 
 struct Port{
-    char* id;
     bool isAnalog = false;
     bool isOutput = true;
-    uint8_t port;
 };
 
-void actPort();
+extern Port ports[64];
+
+void actPort(int portNumber, char* msg);
 void setupPorts();
 
 #endif

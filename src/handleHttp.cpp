@@ -14,8 +14,8 @@ void httpSetup(){
   server.on("/", handleWifi);
   server.on("/wifi", handleWifi);
   server.on("/wifisave", handleWifiSave);
-  server.on("/generate_204", handleRoot); //Android captive portal. Maybe not needed. Might be handled by notFound handler.
-  server.on("/fwlink", handleRoot);       //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
+  server.on("/generate_204", handleWifi); //Android captive portal. Maybe not needed. Might be handled by notFound handler.
+  server.on("/fwlink", handleWifi);       //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
   server.onNotFound(handleNotFound);
   server.begin(); // Web server start
   Serial.println("HTTP server started");
