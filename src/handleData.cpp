@@ -4,13 +4,14 @@
 #include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleMQTT.h"
+#include <ArduinoJson.h>
 
-char* parseJSON(char* rawJson){
-    return rawJson;
-}
-
-char* generateJSON(char* rawJson){
-    return rawJson;
+JsonObject parseJSON(char* rawJson){
+    DynamicJsonDocument doc(1024);
+    String input = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
+    deserializeJson(doc, input);
+    JsonObject obj = doc.as<JsonObject>();
+    return obj;
 }
 
 void loadData(){
@@ -22,8 +23,7 @@ void loadData(){
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server),ok);
     EEPROM.end();
-    if (String(ok) != String("OK"))
-    {
+    if (String(ok) != String("OK")){
         ssid[0] = 0;
         password[0] = 0;
         firstBoot = true;

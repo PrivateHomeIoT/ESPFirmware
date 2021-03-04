@@ -40,7 +40,7 @@ void connectWifi()
 }
 void wifiSetup()
 {
-    if (ssid == ""){
+    if (strcmp(ssid,"")==0){
         Serial.println("Configuring access point...");
         WiFi.softAPConfig(apIP, apIP, netMsk);
         WiFi.softAP(softAP_ssid, softAP_password);
