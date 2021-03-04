@@ -8,9 +8,9 @@ char mqtt_server[17] = "192.168.178.136";
 int mqtt_port = 1500;
 PubSubClient client(espClient);
 
-uint getPortOfID(char p){
-  for(uint i = 0; i < sizeof(chars); i++) if(p == chars[i]) return i;
-  return 2;
+Port getPortOfID(char p){
+  for(uint i = 0; i < sizeof(chars); i++) if(p == ports[i].identifier) return ports[i];
+  return Port(p);
 }
 
 void connectMQTT() {
@@ -48,8 +48,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
     msg[i]=(char)payload[i];
   }
-  int actNumber = getPortOfID(topic[sizeof(topic)-1]);
-  actPort(actNumber, msg);
+  for(uint i = 0; i < sizeof(topic); i++) if(strcmp(topic, (char*)("Home/switch/cmnd/" + (String)myHostname + chars[i]).c_str()) == 0) actPort(getPortOfID(chars[i]), msg);
+  for(uint i = 0; i < sizeof(topic); i++) if(strcmp(topic, (char*)("Home/config/" + (String)myHostname + chars[i]).c_str()) == 0) configPort(getPortOfID(chars[i]), msg);
 }
 
 void loopMQTT() {

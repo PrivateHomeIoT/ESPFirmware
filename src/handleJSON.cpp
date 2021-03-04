@@ -5,6 +5,14 @@
 #include "handleWifi.h"
 #include "handleMQTT.h"
 
+char* parseJSON(char* rawJson){
+    return rawJson;
+}
+
+char* generateJSON(char* rawJson){
+    return rawJson;
+}
+
 void loadData(){
     EEPROM.begin(512);
     EEPROM.get(0, ssid);
