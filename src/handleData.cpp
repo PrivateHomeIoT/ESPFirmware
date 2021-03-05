@@ -4,6 +4,7 @@
 #include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleMQTT.h"
+#include "handlePorts.h"
 #include <ArduinoJson.h>
 
 JsonObject parseJSON(char* rawJson){
@@ -21,7 +22,12 @@ void loadData(){
     char ok[2 + 1];
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-    EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server),ok);
+     for(uint i = 0; i < sizeof(ports); i++){
+        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + i, ports[i].hardwarePort);
+        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(ports) + i, ports[i].isAnalog);
+        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 2* sizeof(ports) + i, ports[i].isOutput);
+    }
+    EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 3* sizeof(ports),ok);
     EEPROM.end();
     if (String(ok) != String("OK")){
         ssid[0] = 0;
@@ -44,7 +50,12 @@ void saveData(){
     char ok[2 + 1] = "OK";
     EEPROM.put(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-    EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server),ok);
+    for(uint i = 0; i < sizeof(ports); i++){
+        EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + i, ports[i].hardwarePort);
+        EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(ports) + i, ports[i].isAnalog);
+        EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 2* sizeof(ports) + i, ports[i].isOutput);
+    }
+    EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 3* sizeof(ports),ok);
     EEPROM.commit();
     EEPROM.end();
     Serial.println("Saved wifi credentials and other information");

@@ -33,7 +33,7 @@ struct Port{
 extern Port ports[64];
 extern char chars[];
 
-Port getPortofID(char p);
+Port getPortOfID(char p);
 int getArrayIDofPort(Port port);
 void setupPorts();
 void actPort(Port port, char* msg);
