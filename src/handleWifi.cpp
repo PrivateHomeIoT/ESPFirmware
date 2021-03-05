@@ -28,8 +28,7 @@ bool firstBoot = false;
 boolean connect;
 boolean connected;
 
-void connectWifi()
-{
+void connectWifi(){
     Serial.println("Connecting as wifi client...");
     WiFi.disconnect();
     WiFi.begin(ssid, password);
@@ -38,8 +37,8 @@ void connectWifi()
     Serial.println(connRes);
     if(connRes == 3) connected = true;
 }
-void wifiSetup()
-{
+
+void wifiSetup(){
     if (strcmp(ssid,"")==0){
         Serial.println("Configuring access point...");
         WiFi.softAPConfig(apIP, apIP, netMsk);
@@ -52,31 +51,26 @@ void wifiSetup()
         dnsServer.start(DNS_PORT, "*", apIP);
         loadData(); // Load WLAN credentials from network
         connect = strlen(ssid) > 0;
-    }
-    else connectWifi();
+    } else connectWifi();
 }
+
 void wifiLoop(){
-    if (connect)
-    {
+    if (connect){
         Serial.println("Connect requested");
         connect = false;
         connectWifi();
         lastConnectTry = millis();
-    }
-    {
+    }{
         unsigned int s = WiFi.status();
-        if (s == 0 && millis() > (lastConnectTry + 60000))
-        {
+        if (s == 0 && millis() > (lastConnectTry + 60000)){
             /* If WLAN disconnected and idle try to connect */
             /* Don't set retry time too low as retry interfere the softAP operation */
             connect = true;
         }
-        if (WiFi.status() != s)
-        { // WLAN status change
+        if (WiFi.status() != s){ // WLAN status change
             Serial.print("Status: ");
             Serial.println(s);
-            if (s == WL_CONNECTED)
-            {
+            if (s == WL_CONNECTED){
                 /* Just connected to WLAN */
                 Serial.println("");
                 Serial.print("Connected to ");
@@ -84,24 +78,17 @@ void wifiLoop(){
                 Serial.print("IP address: ");
                 Serial.println(WiFi.localIP());
                 // Setup MDNS responder
-                if (!MDNS.begin(myHostname))
-                {
+                if (!MDNS.begin(myHostname)){
                     Serial.println("Error setting up MDNS responder!");
-                }
-                else
-                {
+                } else {
                     Serial.println("mDNS responder started");
                     // Add service to MDNS-SD
                     MDNS.addService("http", "tcp", 80);
                 }
-            }
-            else if (s == WL_NO_SSID_AVAIL)
-            {
+            } else if (s == WL_NO_SSID_AVAIL){
                 WiFi.disconnect();
             }
-        }
-        if (s == WL_CONNECTED)
-        {
+        } if (s == WL_CONNECTED) {
             MDNS.update();
         }
     }

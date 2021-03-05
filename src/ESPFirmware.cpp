@@ -10,7 +10,6 @@ void setup(){
     Serial.begin(115200);
     setupPorts();
     loadData();
-    //setupPorts(); --> handleConfig.h?
     wifiSetup();
     httpSetup();
     delay(500);
