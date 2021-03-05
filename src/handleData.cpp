@@ -22,10 +22,14 @@ void loadData(){
     char ok[2 + 1];
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-     for(uint i = 0; i < sizeof(ports); i++){
-        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + i, ports[i].hardwarePort);
-        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(ports) + i, ports[i].isAnalog);
-        EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 2* sizeof(ports) + i, ports[i].isOutput);
+    bool isFirst = true;
+    EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 3* sizeof(ports)+ sizeof(ok),isFirst);
+    if(!isFirst){
+        for(uint i = 0; i < sizeof(ports); i++){
+            EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + i, ports[i].hardwarePort);
+            EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(ports) + i, ports[i].isAnalog);
+            EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 2* sizeof(ports) + i, ports[i].isOutput);
+        }
     }
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 3* sizeof(ports),ok);
     EEPROM.end();
@@ -50,6 +54,8 @@ void saveData(){
     char ok[2 + 1] = "OK";
     EEPROM.put(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
+    bool isFirst = true;
+    EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 3* sizeof(ports)+ sizeof(ok),isFirst);
     for(uint i = 0; i < sizeof(ports); i++){
         EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + i, ports[i].hardwarePort);
         EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(ports) + i, ports[i].isAnalog);
