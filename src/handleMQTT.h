@@ -6,7 +6,7 @@
 
 extern PubSubClient client;
 extern char mqtt_server[17];
-extern char* randomCode;
+extern const char* randomCode;
 
 void loopMQTT();
 void setupMQTT();

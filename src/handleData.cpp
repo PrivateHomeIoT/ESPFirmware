@@ -21,11 +21,11 @@ void serialSetup(){
         Serial.flush();
         Serial.println("PrivateHome-ESPFirmware");
         Serial.println();
-        Serial.println("Welcome to the ESPFirmware. This console is thought for experts and the automatic configuration by the server.")
-        Serial.println("If you want to get further information, have a look at our GitHub-Repo and Wiki. https://github.com/PrivateHomeIoT/ESPFirmware")
+        Serial.println("Welcome to the ESPFirmware. This console is thought for experts and the automatic configuration by the server.");
+        Serial.println("If you want to get further information, have a look at our GitHub-Repo and Wiki. https://github.com/PrivateHomeIoT/ESPFirmware");
         Serial.println();
-        if (firstBoot) Serial.println("No data found...")
-        Serial.println("Finished with recovering data...")
+        if (firstBoot) Serial.println("No data found...");
+        Serial.println("Finished with recovering data...");
     }
 }
 

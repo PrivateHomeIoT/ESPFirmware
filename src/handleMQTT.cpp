@@ -5,7 +5,7 @@
 
 char mqtt_server[17] = "192.168.178.136";
 int mqtt_port = 1500;
-char* randomCode = (char*)"1234567890";
+const char* randomCode = (char*)"1234567890";
 PubSubClient client(espClient);
 
 void connectMQTT() {
