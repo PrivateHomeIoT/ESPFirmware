@@ -5,6 +5,7 @@
 
 char mqtt_server[17] = "192.168.178.136";
 int mqtt_port = 1500;
+char* randomCode = (char*)"1234567890";
 PubSubClient client(espClient);
 
 void connectMQTT() {
@@ -16,20 +17,17 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      // Once connected, publish an announcement
-      client.publish((char*)((String)myHostname + "/status").c_str(), "online");
-      client.publish((char*)("Home/stat/" + (String)myHostname).c_str(), "1.0");
-      client.subscribe(((char*)((String)myHostname + "/").c_str()));
-      for (uint i = 0; i < 64; i++) client.subscribe((char*)("Home/config/" + (String)myHostname + chars[i]).c_str());
-      for (uint i = 0; i < 64; i++) client.subscribe((char*)("Home/switch/cmnd/" + (String)myHostname + chars[i]).c_str());
-    } else {
+      client.publish((char*)("Hhome/status/" + (String)myHostname).c_str(), "online");
+      client.subscribe(((char*)("home/setup/"+(String)myHostname).c_str()));
+      client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
+      } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
+      }
     }
-  }
   }
 }
 
@@ -38,12 +36,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print(topic);
   Serial.print("] ");
   char *msg;
+
   for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
     msg[i]=(char)payload[i];
   }
-  for(uint i = 0; i < sizeof(topic); i++) if(strcmp(topic, (char*)("Home/switch/cmnd/" + (String)myHostname + chars[i]).c_str()) == 0) actPort(getPortOfID(chars[i]), msg);
-  for(uint i = 0; i < sizeof(topic); i++) if(strcmp(topic, (char*)("Home/config/" + (String)myHostname + chars[i]).c_str()) == 0) configPort(getPortOfID(chars[i]), msg);
+
+  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(msg);
+  if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(msg);
 }
 
 void loopMQTT() {
@@ -55,5 +55,5 @@ void setupMQTT(){
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
     connectMQTT();
-    client.publish((char*)((String)myHostname + "/config").c_str(), myHostname);
+    client.publish((char*)("home/setupRequest/"+ (String)(myHostname)).c_str(), myHostname);
 }
