@@ -10,8 +10,7 @@
 
 JsonObject parseJSON(char* rawJson){
     DynamicJsonDocument doc(1024);
-    String input = "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
-    deserializeJson(doc, input);
+    deserializeJson(doc,rawJson);
     JsonObject obj = doc.as<JsonObject>();
     return obj;
 }
@@ -27,27 +26,25 @@ void serialSetup(){
 
 void serialLoop(){
     if(Serial.available()){
-        if(Serial.readStringUntil(':')=="iv"){
-            
-        }
+        ;
     }
 }
 
 void loadData(){
+    char ok[2 + 1];
     EEPROM.begin(512);
     EEPROM.get(0, ssid);
     EEPROM.get(0 + sizeof(ssid), password);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-    //EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server), aes_key);
-    //EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(aes_key), ok);
+    for(uint i = 0; i<16; i++) EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) +i, aes_key[i]);
+    EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 16,ok);
     EEPROM.end();
-    // char ok[2 + 1];
-    // if (String(ok) != String("OK")){
-    //     ssid[0] = 0;
-    //     password[0] = 0;
-    //     firstBoot = true;
-    // }
+    if (String(ok) != String("OK")){
+        ssid[0] = 0;
+        password[0] = 0;
+        firstBoot = true;
+    }
     Serial.println("Recovered credentials:");
     Serial.println(ssid);
     Serial.println(strlen(password) > 0 ? "********" : "<no password>");
@@ -63,9 +60,9 @@ void saveData(){
     EEPROM.put(0 + sizeof(ssid), password);
     EEPROM.put(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-    //EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server), aes_key);
-    // char ok[2 + 1] = "OK";
-    //EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + sizeof(aes_key),ok);
+    for(uint i = 0; i<16; i++) EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) +i, aes_key[i]);
+    char ok[2 + 1] = "OK";
+    EEPROM.put(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 16,ok);
     EEPROM.commit();
     EEPROM.end();
     Serial.println("Saved wifi credentials and other information");

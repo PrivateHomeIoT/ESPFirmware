@@ -1,5 +1,5 @@
 #include "handleWifi.h"
-#include "handleHttp.h"
+// #include "handleHttp.h"
 #include "handleData.h"
 #include "handleMQTT.h"
 #include "handlePorts.h"
@@ -10,7 +10,7 @@ void setup(){
     Serial.begin(9600);
     loadData();
     wifiSetup();
-    httpSetup();
+    // httpSetup();
     delay(500);
 }
 

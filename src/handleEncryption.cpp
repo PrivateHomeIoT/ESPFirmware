@@ -16,9 +16,9 @@ void aes_init() {
   aesLib.gen_iv(aes_iv);
 }
 
-void decodeIV(char raw[16]){
+void decodeIV(char base64[16]){
   char encoded[16]; 
-  base64_decode(encoded, raw, 16);
+  base64_decode(encoded, base64, 16);
   for(uint i = 0; i<16; i++) aes_iv[i] = (byte)encoded[i];
   aesLib.gen_iv(aes_iv);
 }
