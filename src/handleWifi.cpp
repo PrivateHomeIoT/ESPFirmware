@@ -3,7 +3,7 @@
 #include <ESP8266mDNS.h>
 #include <DNSServer.h>
 #include <Arduino.h>
-// #include "handleHttp.h"
+#include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleData.h"
 
@@ -92,9 +92,6 @@ void wifiLoop(){
             MDNS.update();
         }
     }
-    // Do work:
-    //DNS
     dnsServer.processNextRequest();
-    // //HTTP
-    // server.handleClient();
+    server.handleClient();
 }
