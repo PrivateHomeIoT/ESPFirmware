@@ -74,10 +74,6 @@ void wait(unsigned long milliseconds) {
   }
 }
 
-unsigned long loopcount = 0;
-byte enc_iv[N_BLOCK] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // iv_block gets written to, provide own fresh copy...
-byte dec_iv[N_BLOCK] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
 char* decrypt(char* text){
     return p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv);
 }
