@@ -1,14 +1,14 @@
 #include "handleEncryption.h" 
+#include "ESP8266TrueRandom.h"
 
 AESLib aesLib;
 
 // AES Encryption Key
-char keyRaw[16];
 byte aes_key[] = {0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30};
 
 // General initialization vector (you must use your own IV's in production for full security!!!)
-char ivRaw[16];
 byte aes_iv[N_BLOCK] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+char base64_iv[16];
 
 // Generate IV (once)
 void aes_init() {
@@ -16,9 +16,28 @@ void aes_init() {
   aesLib.gen_iv(aes_iv);
 }
 
+void decodeIV(char raw[16]){
+  char encoded[16]; 
+  base64_decode(encoded, raw, 16);
+  for(uint i = 0; i<16; i++) aes_iv[i] = (byte)encoded[i];
+  aesLib.gen_iv(aes_iv);
+}
+
+void getNewIV(){
+  byte result[16];
+  char raw[16];
+  for(uint i = 0; i<16; i++){
+    result[i] = ESP8266TrueRandom.randomByte();
+    raw[i] = (char)result[i];
+    aes_iv[i] = result[i];
+  }
+  base64_encode(base64_iv, raw, 16);
+  aesLib.gen_iv(aes_iv);
+}
+
 char* p_encrypt(char * msg, uint16_t msgLen, byte iv[]) {
   int cipherlength = aesLib.get_cipher64_length(msgLen);
-  char encrypted[cipherlength]; // AHA! needs to be large, 2x is not enough
+  char encrypted[cipherlength]; 
   aesLib.encrypt64(msg, msgLen, encrypted, aes_key, sizeof(aes_key), iv);
   Serial.print("encrypted = "); Serial.println(encrypted);
   return encrypted;

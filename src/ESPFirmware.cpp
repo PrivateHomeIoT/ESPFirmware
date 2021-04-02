@@ -7,8 +7,7 @@
 
 void setup(){
     delay(1000);
-    Serial.begin(115200);
-    setupPorts();
+    Serial.begin(9600);
     loadData();
     wifiSetup();
     httpSetup();

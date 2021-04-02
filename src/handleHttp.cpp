@@ -121,8 +121,6 @@ void handleWifiSave(){
   server.arg("p").toCharArray(password, sizeof(password) - 1);
   server.arg("s").toCharArray((char*)mqtt_server, sizeof(mqtt_server) - 1);
   server.arg("id").toCharArray((char*)myHostname, sizeof(myHostname)-1);
-  server.arg("kev").toCharArray((char*)keyRaw, sizeof(keyRaw) - 1);
-  server.arg("iv").toCharArray((char*)ivRaw, sizeof(ivRaw)-1);
   server.sendHeader("Location", "wifi", true);
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");

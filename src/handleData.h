@@ -8,6 +8,7 @@ extern char password[65];
 extern bool firstBoot;
 
 JsonObject parseJSON(char* rawJSON);
+void serialSetup();
 void saveData();
 void loadData();
 
