@@ -1,6 +1,7 @@
 #include "handleMQTT.h"
 #include "handleWifi.h"
 #include "handlePorts.h"
+#include "handleEncryption.h"
 #include "Arduino.h"
 
 char mqtt_server[17] = "192.168.178.136";
@@ -17,8 +18,8 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), myHostname);
-      client.publish((char*)("home/status/" + (String)myHostname).c_str(), "online");
+      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encrypt(myHostname));
+      client.publish((char*)("home/status/" + (String)myHostname).c_str(), encrypt((char*)"online"));
       client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
       } else {
@@ -40,11 +41,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
-    msg[i]=(char)payload[i];
+    char* iv;
+    if(i<16) iv[i] = (char)payload[i];
+    else msg[i-16] = (char)payload[i];
+    decodeIV(iv);
   }
 
-  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(msg);
-  if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(msg);
+  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypt(msg));
+  if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(decrypt(msg));
 }
 
 void loopMQTT() {
