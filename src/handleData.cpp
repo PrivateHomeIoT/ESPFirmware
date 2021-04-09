@@ -8,6 +8,13 @@
 #include "handlePorts.h"
 #include <ArduinoJson.h>
 
+char* rawString;
+bool setSSID = false;
+bool setPW = false;
+bool setServer = false;
+bool setKey = false;
+bool setID = false;
+
 JsonObject parseJSON(char* rawJson){
     DynamicJsonDocument doc(1024);
     deserializeJson(doc,rawJson);
@@ -24,14 +31,52 @@ void serialSetup(){
         Serial.println("Welcome to the ESPFirmware. This console is thought for experts and the automatic configuration by the server.");
         Serial.println("If you want to get further information, have a look at our GitHub-Repo and Wiki. https://github.com/PrivateHomeIoT/ESPFirmware");
         Serial.println();
-        if (firstBoot) Serial.println("No data found...");
-        Serial.println("Finished with recovering data...");
     }
 }
 
-void serialLoop(){
-    if(Serial.available()){
-        ;
+void serialEvent(){
+    while(Serial.available()){
+        char inChar = (char)Serial.read();
+        if(inChar == '/n'){
+            Serial.println("Message received: " + (String)rawString);
+            if(strcmp(rawString, (const char*)"setSSID") == 0) setSSID = true;
+            else if(setSSID) {
+                for(uint i = 0; i<33; i++) ssid[i] = rawString[i];
+                setSSID = false;
+                saveData();
+                Serial.println("SUCCESS");
+            }
+            else if(strcmp(rawString, (const char*)"setPW") == 0) setPW = true;
+            else if(setPW) {
+                for(uint i = 0; i<65; i++) password[i] = rawString[i];
+                setPW = false;
+                saveData();
+                Serial.println("SUCCESS");
+            }
+            else if(strcmp(rawString, (const char*)"setServer") == 0) setServer = true;
+            else if(setServer) {
+                for(uint i = 0; i<17; i++) mqtt_server[i] = rawString[i];
+                setServer = false;
+                saveData();
+                Serial.println("SUCCESS");
+            }
+            else if(strcmp(rawString, (const char*)"setAESKey") == 0) setKey = true;
+            else if(setKey) {
+                decodeKEY(rawString);
+                setServer = false;
+                saveData();
+                Serial.println("SUCCESS");
+            }
+            else if(strcmp(rawString, (const char*)"setID") == 0) setID = true;
+            else if(setID) {
+                for(uint i = 0; i<sizeof(rawString); i++) myHostname[i] = rawString[i];
+                setServer = false;
+                saveData();
+                Serial.println("SUCCESS");
+            }
+            rawString = (char*)"";
+            delay(1000);
+        } else rawString += inChar;
     }
 }
 
@@ -50,6 +95,7 @@ void loadData(){
         password[0] = 0;
         firstBoot = true;
     }
+    if (firstBoot) Serial.println("No data found...");
     // Serial.println("Recovered credentials:");
     // Serial.println(ssid);
     // Serial.println(strlen(password) > 0 ? "********" : "<no password>");
@@ -58,6 +104,7 @@ void loadData(){
     // Serial.println(mqtt_server);
     // Serial.println(myHostname);
     setupMQTT();
+    Serial.println("Finished with recovering data...");
 }
 
 void saveData(){
@@ -74,5 +121,4 @@ void saveData(){
     Serial.println("Saved wifi credentials and other information");
     Serial.println(mqtt_server);
     Serial.println(myHostname);
-    ESP.restart();
 }

@@ -21,7 +21,7 @@ IPAddress netMsk(255, 255, 255, 0);
 
 const char *softAP_ssid = APSSID;
 const char *softAP_password = APPSK;
-char myHostname[16] = "privateHomeIoT0";
+char myHostname[16] = "PrivateHomeIoTe";
 const byte DNS_PORT = 53;
 unsigned long lastConnectTry = 0;
 bool firstBoot = false;
