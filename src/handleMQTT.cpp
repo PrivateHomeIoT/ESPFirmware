@@ -17,8 +17,9 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      client.publish((char*)("Hhome/status/" + (String)myHostname).c_str(), "online");
-      client.subscribe(((char*)("home/setup/"+(String)myHostname).c_str()));
+      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), myHostname);
+      client.publish((char*)("home/status/" + (String)myHostname).c_str(), "online");
+      client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
       } else {
       Serial.print("failed, rc=");
@@ -55,5 +56,4 @@ void setupMQTT(){
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
     connectMQTT();
-    client.publish((char*)("home/setupRequest/"+ (String)(myHostname)).c_str(), myHostname);
 }

@@ -6,8 +6,8 @@
 #include "Arduino.h"
 
 void setup(){
-    loadData();
     serialSetup();
+    loadData();
     wifiSetup();
     httpSetup();
     delay(500);
