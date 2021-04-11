@@ -85,5 +85,6 @@ char* decrypt(char* text){
 }
 
 char* encrypt(char* text){
-    return p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
+  getNewIV();
+  return (char*)((String)((char*)aes_iv) + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv))).c_str();
 }

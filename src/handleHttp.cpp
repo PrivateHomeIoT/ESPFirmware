@@ -1,4 +1,5 @@
 #include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
 #include <ESP8266mDNS.h>
 #include <DNSServer.h>
 #include <Arduino.h>
@@ -9,6 +10,7 @@
 #include "handleEncryption.h"
 
 ESP8266WebServer server(80);
+ESP8266HTTPUpdateServer httpUpdater;
 
 void httpSetup(){
   server.on("/", handleWifi);

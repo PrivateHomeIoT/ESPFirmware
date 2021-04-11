@@ -52,6 +52,10 @@ void wifiSetup(){
         loadData(); // Load WLAN credentials from network
         connect = strlen(ssid) > 0;
     } else connectWifi();
+    // MDNS.begin(myHostname);
+    // httpUpdater.setup(&server);
+    // httpSetup();
+    // MDNS.addService("http","tcp",80);
 }
 
 void wifiLoop(){
@@ -82,6 +86,8 @@ void wifiLoop(){
                     Serial.println("Error setting up MDNS responder!");
                 } else {
                     Serial.println("mDNS responder started");
+                    httpUpdater.setup(&server);
+                    httpSetup();
                     // Add service to MDNS-SD
                     MDNS.addService("http", "tcp", 80);
                 }
