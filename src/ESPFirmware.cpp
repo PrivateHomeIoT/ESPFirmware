@@ -9,7 +9,6 @@ void setup(){
     serialSetup();
     loadData();
     wifiSetup();
-    httpSetup();
     delay(500);
 }
 
