@@ -9,6 +9,7 @@
 #include <ArduinoJson.h>
 
 char* rawString;
+byte* rawBytes;
 bool setSSID = false;
 bool setPW = false;
 bool setServer = false;
@@ -36,7 +37,8 @@ void serialSetup(){
 
 void serialEvent(){
     while(Serial.available()){
-        char inChar = (char)Serial.read();
+        byte inByte = Serial.read();
+        char inChar = (char)inByte;
         if(inChar == '/n'){
             Serial.println("Message received: " + (String)rawString);
             if(strcmp(rawString, (const char*)"setSSID") == 0) setSSID = true;
@@ -62,21 +64,25 @@ void serialEvent(){
             }
             else if(strcmp(rawString, (const char*)"setAESKey") == 0) setKey = true;
             else if(setKey) {
-                decodeKEY(rawString);
-                setServer = false;
+                // decodeKEY(rawString);
+                for(uint i = 0; i<sizeof(rawString); i++) aes_key[i] = rawBytes[i];
+                setKey = false;
                 saveData();
                 Serial.println("SUCCESS");
             }
             else if(strcmp(rawString, (const char*)"setID") == 0) setID = true;
             else if(setID) {
                 for(uint i = 0; i<sizeof(rawString); i++) myHostname[i] = rawString[i];
-                setServer = false;
+                setID = false;
                 saveData();
                 Serial.println("SUCCESS");
             }
             rawString = (char*)"";
             delay(1000);
-        } else rawString += inChar;
+        } else {
+            rawString += inChar;
+            rawBytes += inByte;
+        }
     }
 }
 

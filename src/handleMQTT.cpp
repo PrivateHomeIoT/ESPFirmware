@@ -42,9 +42,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
     char* iv;
-    if(i<16) iv[i] = (char)payload[i];
+    if(i<16) aes_iv[i] = payload[i];
     else msg[i-16] = (char)payload[i];
-    decodeIV(iv);
+    // decodeIV(iv);
   }
 
   if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypt(msg));

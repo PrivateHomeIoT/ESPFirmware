@@ -16,18 +16,18 @@ void aes_init() {
   aesLib.gen_iv(aes_iv);
 }
 
-void decodeKEY(char base64[16]){
-  char encoded[16]; 
-  base64_decode(encoded, base64, 16);
-  for(uint i = 0; i<16; i++) aes_key[i] = (byte)encoded[i];
-}
+// void decodeKEY(char base64[16]){
+//   //char encoded[16]; 
+//   //base64_decode(encoded, base64, 16);
+//   for(uint i = 0; i<16; i++) aes_key[i] = (byte)base64[i];
+// }
 
-void decodeIV(char base64[16]){
-  char encoded[16]; 
-  base64_decode(encoded, base64, 16);
-  for(uint i = 0; i<16; i++) aes_iv[i] = (byte)encoded[i];
-  aesLib.gen_iv(aes_iv);
-}
+// void decodeIV(char base64[16]){
+//   //char encoded[16]; 
+//   //base64_decode(encoded, base64, 16);
+//   for(uint i = 0; i<16; i++) aes_iv[i] = (byte)base64[i];
+//   aesLib.gen_iv(aes_iv);
+// }
 
 void getNewIV(){
   byte result[16];

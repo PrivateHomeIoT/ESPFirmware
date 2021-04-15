@@ -109,7 +109,7 @@ void handleWifi(){
       "<br /><input type='password' placeholder='password' name='p'/>"
       "<br /><input type='text' placeholder='IP adress of the PrivateHome-Server' name='s'/>"
       "<br /><input type='text' placeholder='Device ID' name='id'/>"
-      "<br /><input type='text' placeholder='Encryption-Key' name='key'/>"
+      // "<br /><input type='text' placeholder='Encryption-Key' name='key'/>"
       "<br /><input type='submit' value='Connect/Disconnect'/></form>"
       "</body></html>");
   server.send(200, "text/html", Page);
@@ -123,8 +123,8 @@ void handleWifiSave(){
   server.arg("s").toCharArray((char*)mqtt_server, sizeof(mqtt_server) - 1);
   server.arg("id").toCharArray((char*)myHostname, sizeof(myHostname)-1);
   char keyRaw[16];
-  server.arg("key").toCharArray(keyRaw, 16);
-  decodeKEY(keyRaw);
+  // server.arg("key").toCharArray(keyRaw, 16);
+  // decodeKEY(keyRaw);
   server.sendHeader("Location", "wifi", true);
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
