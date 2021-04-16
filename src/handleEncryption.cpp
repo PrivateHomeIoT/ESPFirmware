@@ -22,7 +22,7 @@ void getNewIV(){
 }
 
 char* p_encrypt(char * msg, uint16_t msgLen, byte iv[]) {
-  int cipherlength = aesLib.get_cipher64_length(msgLen);
+  int cipherlength = aesLib.get_cipher_length(msgLen);
   char encrypted[cipherlength]; 
   aesLib.encrypt((byte *)msg, msgLen, encrypted, aes_key, sizeof(aes_key), iv);
   Serial.print("encrypted = "); Serial.println(encrypted);
@@ -67,5 +67,10 @@ char* encrypt(char* text){
   getNewIV();
   Serial.println("IV: "+ (String)((char*)aes_iv));
   Serial.println("encrypted message: " + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv)));
-  return (char*)((String)((char*)aes_iv) + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv))).c_str();
+  char *p_encrypted = p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
+  static char buf[16+sizeof(p_encrypted)];
+  strcpy(buf,(char*)aes_iv);
+  strcat(buf,p_encrypted);
+  //return (char*)((String)((char*)aes_iv) + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv))).c_str();
+  return buf;
 }
