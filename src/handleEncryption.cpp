@@ -71,5 +71,7 @@ char* decrypt(char* text){
 
 char* encrypt(char* text){
   getNewIV();
+  Serial.println("IV: "+ (String)((char*)aes_iv));
+  Serial.println("encrypted message: " + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv)));
   return (char*)((String)((char*)aes_iv) + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv))).c_str();
 }

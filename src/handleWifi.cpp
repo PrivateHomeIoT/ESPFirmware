@@ -3,7 +3,6 @@
 #include <ESP8266mDNS.h>
 #include <DNSServer.h>
 #include <Arduino.h>
-#include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleData.h"
 
@@ -39,19 +38,7 @@ void connectWifi(){
 }
 
 void wifiSetup(){
-    if (strcmp(ssid,"")==0){
-        Serial.println("Configuring access point...");
-        WiFi.softAPConfig(apIP, apIP, netMsk);
-        WiFi.softAP(softAP_ssid, softAP_password);
-        delay(500); // Without delay I've seen the IP address blank
-        Serial.print("AP IP address: ");
-        Serial.println(WiFi.softAPIP());
-        /* Setup the DNS server redirecting all the domains to the apIP */
-        dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
-        dnsServer.start(DNS_PORT, "*", apIP);
-        loadData(); // Load WLAN credentials from network
-        connect = strlen(ssid) > 0;
-    } else connectWifi();
+    connectWifi();
     // MDNS.begin(myHostname);
     // httpUpdater.setup(&server);
     // httpSetup();
@@ -86,8 +73,6 @@ void wifiLoop(){
                     Serial.println("Error setting up MDNS responder!");
                 } else {
                     Serial.println("mDNS responder started");
-                    httpUpdater.setup(&server);
-                    httpSetup();
                     // Add service to MDNS-SD
                     MDNS.addService("http", "tcp", 80);
                 }
@@ -99,5 +84,4 @@ void wifiLoop(){
         }
     }
     dnsServer.processNextRequest();
-    server.handleClient();
 }

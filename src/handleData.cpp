@@ -2,7 +2,6 @@
 #include <EEPROM.h>
 #include "handleData.h"
 #include "handleEncryption.h"
-#include "handleHttp.h"
 #include "handleWifi.h"
 #include "handleMQTT.h"
 #include "handlePorts.h"
