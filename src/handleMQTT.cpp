@@ -44,7 +44,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     char* iv;
     if(i<16) aes_iv[i] = payload[i];
     else msg[i-16] = (char)payload[i];
-    // decodeIV(iv);
   }
 
   if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypt(msg));

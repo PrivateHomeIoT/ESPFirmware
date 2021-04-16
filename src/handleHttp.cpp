@@ -122,9 +122,15 @@ void handleWifiSave(){
   server.arg("p").toCharArray(password, sizeof(password) - 1);
   server.arg("s").toCharArray((char*)mqtt_server, sizeof(mqtt_server) - 1);
   server.arg("id").toCharArray((char*)myHostname, sizeof(myHostname)-1);
-  char keyRaw[16];
-  // server.arg("key").toCharArray(keyRaw, 16);
-  // decodeKEY(keyRaw);
+  char* keyRaw;
+  server.arg("key").toCharArray(keyRaw, 16);
+  aes_key[0]= (byte)atoi(strtok(keyRaw, ","));
+  Serial.println((int)aes_key[0]);
+  for(uint i = 1; i<16; i++){
+      aes_key[i] = (byte)atoi(strtok(NULL, ","));
+      Serial.println((int)aes_key[i]);
+  }
+  saveData();
   server.sendHeader("Location", "wifi", true);
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
