@@ -10,24 +10,10 @@ byte aes_key[] = {0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x
 byte aes_iv[N_BLOCK] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 char base64_iv[16];
 
-// Generate IV (once)
 void aes_init() {
   Serial.println("gen_iv()");
   aesLib.gen_iv(aes_iv);
 }
-
-// void decodeKEY(char base64[16]){
-//   //char encoded[16]; 
-//   //base64_decode(encoded, base64, 16);
-//   for(uint i = 0; i<16; i++) aes_key[i] = (byte)base64[i];
-// }
-
-// void decodeIV(char base64[16]){
-//   //char encoded[16]; 
-//   //base64_decode(encoded, base64, 16);
-//   for(uint i = 0; i<16; i++) aes_iv[i] = (byte)base64[i];
-//   aesLib.gen_iv(aes_iv);
-// }
 
 void getNewIV(){
   byte result[16];
@@ -72,7 +58,6 @@ void setupEncryption() {
 
 }
 
-/* non-blocking wait function */
 void wait(unsigned long milliseconds) {
   unsigned long timeout = millis() + milliseconds;
   while (millis() < timeout) {

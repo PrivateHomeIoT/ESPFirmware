@@ -12,7 +12,7 @@ PubSubClient client(espClient);
 void connectMQTT() {
   // Loop until we're reconnected
   if(connected){
-    while (!client.connected()) {
+    if (!client.connected()) {
     Serial.print("Attempting MQTT connection to ");
     Serial.print(mqtt_server);
     // Attempt to connect

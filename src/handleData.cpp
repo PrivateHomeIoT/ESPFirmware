@@ -25,14 +25,12 @@ JsonObject parseJSON(char* rawJson){
 
 void serialSetup(){
     Serial.begin(9600);
-    if(Serial.available()){
-        Serial.flush();
-        Serial.println("PrivateHome-ESPFirmware");
-        Serial.println();
-        Serial.println("Welcome to the ESPFirmware. This console is thought for experts and the automatic configuration by the server.");
-        Serial.println("If you want to get further information, have a look at our GitHub-Repo and Wiki. https://github.com/PrivateHomeIoT/ESPFirmware");
-        Serial.println();
-    }
+    Serial.flush();
+    Serial.println("PrivateHome-ESPFirmware");
+    Serial.println();
+    Serial.println("Welcome to the ESPFirmware. This console is thought for experts and the automatic configuration by the server.");
+    Serial.println("If you want to get further information, have a look at our GitHub-Repo and Wiki. https://github.com/PrivateHomeIoT/ESPFirmware");
+    Serial.println();
 }
 
 // void serialEvent(){
@@ -112,8 +110,12 @@ void serialLoop(){
             Serial.println("SUCCESS");
         }
         if(setKey) {
-            // decodeKEY(rawString);
-            for(uint i = 0; i<sizeof(rawString); i++) aes_key[i] = rawBytes[i];
+            aes_key[0]= (byte)atoi(strtok((char*)rawString.c_str(), ","));
+            Serial.println((int)aes_key[0]);
+            for(uint i = 1; i<16; i++){
+                aes_key[i] = (byte)atoi(strtok(NULL, ","));
+                Serial.println((int)aes_key[i]);
+            }
             setKey = false;
             saveData();
             Serial.println("SUCCESS");
