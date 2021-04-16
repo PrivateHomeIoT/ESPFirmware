@@ -8,7 +8,7 @@
 #include "handlePorts.h"
 #include <ArduinoJson.h>
 
-char* rawString;
+String rawString;
 byte* rawBytes;
 bool setSSID = false;
 bool setPW = false;
@@ -92,15 +92,7 @@ void serialLoop(){
         rawString = Serial.readStringUntil((char)'/n');
         rawString.remove(rawString.length()-1);
         if(rawString == "test") Serial.println("hallo");
-        Serial.println(rawString);
-        Serial.println(rawString.length());
-        Serial.println("Received message!");
-        if(rawString == "test1") Serial.println("test2");
-        if(rawString == "setSSID") setSSID = true;
-        if(rawString == "setPW") setPW = true;
-        if(rawString == "setAESKey") setKey = true;
-        if(rawString == "setServer") setServer = true;
-        if(rawString == "setID") setID = true;
+        Serial.println("Received message: " + rawString);
         if(setSSID) {
             for(uint i = 0; i<33; i++) ssid[i] = rawString[i];
             setSSID = false;
@@ -131,10 +123,15 @@ void serialLoop(){
             setID = false;
             saveData();
             Serial.println("SUCCESS");
-            }  
+            } 
+        if(rawString == "test1") Serial.println("test2");
+        else if(rawString == "setSSID") setSSID = true;
+        else if(rawString == "setPW") setPW = true;
+        else if(rawString == "setAESKey") setKey = true;
+        else if(rawString == "setServer") setServer = true;
+        else if(rawString == "setID") setID = true; 
         }
     }
-}
 
 void loadData(){
     char ok[2 + 1];
