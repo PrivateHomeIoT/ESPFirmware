@@ -9,6 +9,7 @@ extern bool firstBoot;
 
 JsonObject parseJSON(char* rawJSON);
 void serialSetup();
+void serialEvent();
 void serialLoop();
 void saveData();
 void loadData();

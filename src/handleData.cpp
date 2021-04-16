@@ -35,53 +35,103 @@ void serialSetup(){
     }
 }
 
-void serialEvent(){
-    while(Serial.available()){
-        byte inByte = Serial.read();
-        char inChar = (char)inByte;
-        if(inChar == '/n'){
-            Serial.println("Message received: " + (String)rawString);
-            if(strcmp(rawString, (const char*)"setSSID") == 0) setSSID = true;
-            else if(setSSID) {
-                for(uint i = 0; i<33; i++) ssid[i] = rawString[i];
-                setSSID = false;
-                saveData();
-                Serial.println("SUCCESS");
+// void serialEvent(){
+//     while(Serial.available()>0){
+//         byte inByte = Serial.read();
+//         char inChar = (char)inByte;
+//         if(inChar == (char)'/n'){
+//             Serial.println("Message received: " + (String)rawString);
+//             if(strcmp(rawString, (const char*)"setSSID") == 0) setSSID = true;
+//             else if(setSSID) {
+//                 for(uint i = 0; i<33; i++) ssid[i] = rawString[i];
+//                 setSSID = false;
+//                 saveData();
+//                 Serial.println("SUCCESS");
+//             }
+//             else if(strcmp(rawString, (const char*)"setPW") == 0) setPW = true;
+//             else if(setPW) {
+//                 for(uint i = 0; i<65; i++) password[i] = rawString[i];
+//                 setPW = false;
+//                 saveData();
+//                 Serial.println("SUCCESS");
+//             }
+//             else if(strcmp(rawString, (const char*)"setServer") == 0) setServer = true;
+//             else if(setServer) {
+//                 for(uint i = 0; i<17; i++) mqtt_server[i] = rawString[i];
+//                 setServer = false;
+//                 saveData();
+//                 Serial.println("SUCCESS");
+//             }
+//             else if(strcmp(rawString, (const char*)"setAESKey") == 0) setKey = true;
+//             else if(setKey) {
+//                 // decodeKEY(rawString);
+//                 for(uint i = 0; i<sizeof(rawString); i++) aes_key[i] = rawBytes[i];
+//                 setKey = false;
+//                 saveData();
+//                 Serial.println("SUCCESS");
+//             }
+//             else if(strcmp(rawString, (const char*)"setID") == 0) setID = true;
+//             else if(setID) {
+//                 for(uint i = 0; i<sizeof(rawString); i++) myHostname[i] = rawString[i];
+//                 setID = false;
+//                 saveData();
+//                 Serial.println("SUCCESS");
+//             }
+//             else if(strcmp(rawString, (const char*)"test1") == 0) Serial.println("test2");
+//             rawString = (char*)"";
+//         } else {
+//             rawString += inChar;
+//             rawBytes += inByte;
+//         }
+//     }
+// }
+
+void serialLoop(){
+    if(Serial.available() > 0){
+        rawString = "";
+        rawString = Serial.readStringUntil((char)'/n');
+        rawString.remove(rawString.length()-1);
+        if(rawString == "test") Serial.println("hallo");
+        Serial.println(rawString);
+        Serial.println(rawString.length());
+        Serial.println("Received message!");
+        if(rawString == "test1") Serial.println("test2");
+        if(rawString == "setSSID") setSSID = true;
+        if(rawString == "setPW") setPW = true;
+        if(rawString == "setAESKey") setKey = true;
+        if(rawString == "setServer") setServer = true;
+        if(rawString == "setID") setID = true;
+        if(setSSID) {
+            for(uint i = 0; i<33; i++) ssid[i] = rawString[i];
+            setSSID = false;
+            saveData();
+            Serial.println("SUCCESS");
             }
-            else if(strcmp(rawString, (const char*)"setPW") == 0) setPW = true;
-            else if(setPW) {
-                for(uint i = 0; i<65; i++) password[i] = rawString[i];
-                setPW = false;
-                saveData();
-                Serial.println("SUCCESS");
+        if(setPW) {
+            for(uint i = 0; i<65; i++) password[i] = rawString[i];
+            setPW = false;
+            saveData();
+            Serial.println("SUCCESS");
             }
-            else if(strcmp(rawString, (const char*)"setServer") == 0) setServer = true;
-            else if(setServer) {
-                for(uint i = 0; i<17; i++) mqtt_server[i] = rawString[i];
-                setServer = false;
-                saveData();
-                Serial.println("SUCCESS");
+        if(setServer) {
+            for(uint i = 0; i<17; i++) mqtt_server[i] = rawString[i];
+            setServer = false;
+            saveData();
+            Serial.println("SUCCESS");
+        }
+        if(setKey) {
+            // decodeKEY(rawString);
+            for(uint i = 0; i<sizeof(rawString); i++) aes_key[i] = rawBytes[i];
+            setKey = false;
+            saveData();
+            Serial.println("SUCCESS");
             }
-            else if(strcmp(rawString, (const char*)"setAESKey") == 0) setKey = true;
-            else if(setKey) {
-                // decodeKEY(rawString);
-                for(uint i = 0; i<sizeof(rawString); i++) aes_key[i] = rawBytes[i];
-                setKey = false;
-                saveData();
-                Serial.println("SUCCESS");
-            }
-            else if(strcmp(rawString, (const char*)"setID") == 0) setID = true;
-            else if(setID) {
-                for(uint i = 0; i<sizeof(rawString); i++) myHostname[i] = rawString[i];
-                setID = false;
-                saveData();
-                Serial.println("SUCCESS");
-            }
-            rawString = (char*)"";
-            delay(1000);
-        } else {
-            rawString += inChar;
-            rawBytes += inByte;
+        if(setID) {
+            for(uint i = 0; i<sizeof(rawString); i++) myHostname[i] = rawString[i];
+            setID = false;
+            saveData();
+            Serial.println("SUCCESS");
+            }  
         }
     }
 }
