@@ -36,7 +36,7 @@ void serialSetup(){
 void serialLoop(){
     if(Serial.available() > 0){
         rawString = "";
-        rawString = Serial.readStringUntil((char)'/n');
+        rawString = Serial.readStringUntil((char)'/');
         rawString.remove(rawString.length()-1);
         if(rawString == "test") Serial.println("hallo");
         Serial.println("Received message: " + rawString);
