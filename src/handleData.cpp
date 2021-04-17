@@ -77,7 +77,7 @@ void serialLoop(){
         if(rawString == "test1") Serial.println("test2");
         else if(rawString == "setSSID") setSSID = true;
         else if(rawString == "setPW") setPW = true;
-        else if(rawString == "setAESKey") setKey = true;
+        else if(rawString == "setKey") setKey = true;
         else if(rawString == "setServer") setServer = true;
         else if(rawString == "setID") setID = true; 
         }
