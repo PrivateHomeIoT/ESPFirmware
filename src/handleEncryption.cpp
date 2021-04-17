@@ -15,8 +15,6 @@ void aes_init() {
 }
 
 void getNewIV(){
-  byte result[16];
-  char raw[16];
   for(uint i = 0; i<16; i++) aes_iv[i] = ESP8266TrueRandom.randomByte();
   aesLib.gen_iv(aes_iv);
 }
@@ -69,15 +67,15 @@ char* encrypt(char* text){
   getNewIV();
   Serial.println("IV: "+ (String)((char*)aes_iv));
   byte ivCopy[16];
-  memcpy(aes_iv, ivCopy, 16*sizeof(byte));
+  memcpy(ivCopy,aes_iv,16*sizeof(byte));
 
   char* encrypted = p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
   Serial.println("encrypted message: " + (String)encrypted);
+  Serial.println();
 
   static char buf[16+sizeof(encrypted)];
-  strcpy(buf,(char*)aes_iv);
+  strcpy(buf,(char*)ivCopy);
   strcat(buf,encrypted);
-  
-  Serial.println("IV: "+ (String)((char*)aes_iv));
+
   return buf;
 }
