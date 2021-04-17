@@ -13,7 +13,6 @@ extern boolean connected;
 
 extern WiFiClient espClient;
 
-void connectWifi();
 void wifiSetup();
 void wifiLoop();
 #endif
