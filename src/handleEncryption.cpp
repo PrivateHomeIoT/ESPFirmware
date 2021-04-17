@@ -60,6 +60,7 @@ void wait(unsigned long milliseconds) {
 }
 
 char* decrypt(char* text){
+    Serial.println("Decrypted message: "+ (String)p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv));
     return p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv);
 }
 

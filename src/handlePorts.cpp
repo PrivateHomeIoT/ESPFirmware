@@ -1,6 +1,6 @@
 #include "handlePorts.h"
 #include "handleMQTT.h"
-#include "handleWiFi.h"
+#include "handleWifi.h"
 #include "handleData.h"
 
 uint8_t outputs[64];

@@ -20,7 +20,7 @@ void connectMQTT() {
       Serial.println("connected");
       client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encrypt(myHostname));
       client.publish((char*)("home/status/" + (String)myHostname).c_str(), encrypt((char*)"online"));
-      Serial.println("Published first MQTT-message: "+ (String)encrypt((char*)"online"));
+      //Serial.println("Published first MQTT-message: "+ (String)encrypt((char*)"online"));
       client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
       } else {
@@ -41,7 +41,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   char *msg;
 
   for (unsigned int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
+    //Serial.print((char)payload[i]);
     if(i<16) aes_iv[i] = payload[i];
     else msg[i-16] = (char)payload[i];
   }
