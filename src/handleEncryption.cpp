@@ -25,7 +25,7 @@ char* p_encrypt(char * msg, uint16_t msgLen, byte iv[]) {
   int cipherlength = aesLib.get_cipher_length(msgLen);
   char encrypted[cipherlength]; 
   aesLib.encrypt((byte *)msg, msgLen, encrypted, aes_key, sizeof(aes_key), iv);
-  Serial.print("encrypted = "); Serial.println(encrypted);
+  // Serial.print("encrypted = "); Serial.println(encrypted);
   return encrypted;
 }
 
