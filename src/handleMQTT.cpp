@@ -45,6 +45,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if(i<16) aes_iv[i] = payload[i];
     else msg[i-16] = (char)payload[i];
   }
+  Serial.println(decrypt(msg));
   if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypt(msg));
   if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(decrypt(msg));
 }

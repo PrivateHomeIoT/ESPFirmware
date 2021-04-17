@@ -1,27 +1,14 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h>
-#include <DNSServer.h>
 #include <Arduino.h>
 #include "handleWifi.h"
 #include "handleData.h"
 
-#ifndef APSSID
-#define APSSID "PrivateIoTSETUP"
-#define APPSK "privatehome"
-#endif
-
 char ssid[33] = "";
 char password[65] = "";
 WiFiClient espClient;
-DNSServer dnsServer;
-IPAddress apIP(192, 168, 1, 1);
-IPAddress netMsk(255, 255, 255, 0);
-
-const char *softAP_ssid = APSSID;
-const char *softAP_password = APPSK;
-char myHostname[16] = "PrivateHomeIoTe";
-const byte DNS_PORT = 53;
+char myHostname[16] = "PrivateHomeIoTE";
 unsigned long lastConnectTry = 0;
 bool firstBoot = false;
 boolean connect;
@@ -39,10 +26,6 @@ void connectWifi(){
 
 void wifiSetup(){
     connectWifi();
-    // MDNS.begin(myHostname);
-    // httpUpdater.setup(&server);
-    // httpSetup();
-    // MDNS.addService("http","tcp",80);
 }
 
 void wifiLoop(){
@@ -83,5 +66,4 @@ void wifiLoop(){
             MDNS.update();
         }
     }
-    dnsServer.processNextRequest();
 }

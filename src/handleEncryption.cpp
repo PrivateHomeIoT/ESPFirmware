@@ -37,7 +37,7 @@ char* p_decrypt(char * msg, uint16_t msgLen, byte iv[]) {
 
 void setupEncryption() {
   aes_init();
-  aesLib.set_paddingmode(paddingMode::Array);
+  aesLib.set_paddingmode(paddingMode::CMS);
 
   char b64in[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -71,6 +71,5 @@ char* encrypt(char* text){
   static char buf[16+sizeof(p_encrypted)];
   strcpy(buf,(char*)aes_iv);
   strcat(buf,p_encrypted);
-  //return (char*)((String)((char*)aes_iv) + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv))).c_str();
   return buf;
 }
