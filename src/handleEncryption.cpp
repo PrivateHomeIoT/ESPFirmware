@@ -23,13 +23,16 @@ char* p_encrypt(char * msg, uint16_t msgLen, byte iv[]) {
   int cipherlength = aesLib.get_cipher_length(msgLen);
   char encrypted[cipherlength]; 
   aesLib.encrypt((byte *)msg, msgLen, encrypted, aes_key, sizeof(aes_key), iv);
-  // Serial.print("encrypted = "); Serial.println(encrypted);
+  base64_encode(encrypted, encrypted, sizeof(encrypted));
+  Serial.println("encrypted message: " + (String)encrypted);
   return encrypted;
 }
 
 char* p_decrypt(char * msg, uint16_t msgLen, byte iv[]) {
   char decrypted[msgLen];
   aesLib.decrypt((byte *)msg, msgLen, decrypted, aes_key, sizeof(aes_key), iv);
+  base64_decode(decrypted, decrypted, sizeof(decrypted));
+  Serial.println("Decrypted message: "+ (String)decrypted);
   return decrypted;
 }
 
@@ -58,9 +61,8 @@ void wait(unsigned long milliseconds) {
 }
 
 char* decrypt(char* text){
-    char* decrypted = p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv);
-    Serial.println("Decrypted message: "+ (String)decrypted);
-    return decrypted;
+  char* decrypted = p_decrypt(text, (uint16_t) sizeof(text), aes_iv);
+  return decrypted;
 }
 
 char* encrypt(char* text){
@@ -69,8 +71,7 @@ char* encrypt(char* text){
   byte ivCopy[16];
   memcpy(ivCopy,aes_iv,16*sizeof(byte));
 
-  char* encrypted = p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
-  Serial.println("encrypted message: " + (String)encrypted);
+  char* encrypted = p_encrypt(text, (uint16_t) sizeof(text), aes_iv);
   Serial.println();
 
   static char buf[16+sizeof(encrypted)];
