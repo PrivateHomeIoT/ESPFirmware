@@ -60,17 +60,24 @@ void wait(unsigned long milliseconds) {
 }
 
 char* decrypt(char* text){
-    Serial.println("Decrypted message: "+ (String)p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv));
-    return p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv);
+    char* decrypted = p_decrypt(text, (uint16_t) sizeof(text) ,aes_iv);
+    Serial.println("Decrypted message: "+ (String)decrypted);
+    return decrypted;
 }
 
 char* encrypt(char* text){
   getNewIV();
   Serial.println("IV: "+ (String)((char*)aes_iv));
-  Serial.println("encrypted message: " + (String)(p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv)));
-  char *p_encrypted = p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
-  static char buf[16+sizeof(p_encrypted)];
+  byte ivCopy[16];
+  memcpy(aes_iv, ivCopy, 16*sizeof(byte));
+
+  char* encrypted = p_encrypt(text, (uint16_t) sizeof(text) ,aes_iv);
+  Serial.println("encrypted message: " + (String)encrypted);
+
+  static char buf[16+sizeof(encrypted)];
   strcpy(buf,(char*)aes_iv);
-  strcat(buf,p_encrypted);
+  strcat(buf,encrypted);
+  
+  Serial.println("IV: "+ (String)((char*)aes_iv));
   return buf;
 }
