@@ -14,25 +14,27 @@ bool firstBoot = false;
 boolean connect;
 boolean connected;
 
-void connectWifi(){
+void wifiSetup(){
     Serial.println("Connecting as wifi client...");
-    WiFi.disconnect();
+    WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
     int connRes = WiFi.waitForConnectResult();
     Serial.print("connRes: ");
     Serial.println(connRes);
     if(connRes == 3) connected = true;
 }
 
-void wifiSetup(){
-    connectWifi();
-}
-
 void wifiLoop(){
     if (connect){
         Serial.println("Connect requested");
         connect = false;
-        connectWifi();
+        wifiSetup();
         lastConnectTry = millis();
     }{
         unsigned int s = WiFi.status();
