@@ -23,7 +23,7 @@ String printArray(uint8_t input[], uint length){
 }
 
 void setupKey(){
-  if(aesCBC.setKey(aes_key, sizeof(aes_key))) Serial.println("Key setup was successful");
+  if(aesCBC.setKey(aes_key, 16)) Serial.println("Key setup was successful");
   else Serial.println("Key setup failed");
 }
 

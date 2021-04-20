@@ -101,7 +101,10 @@ void loadData(){
         firstBoot = true;
     }
     if (firstBoot) Serial.println("No data found...");
-    if(sizeof(ssid)>0) firstBoot = false;
+    if(sizeof(ssid)>0){
+        firstBoot = false;
+        setupKey();
+    }
     setupMQTT();
     Serial.println("Finished with recovering data...");
 }
