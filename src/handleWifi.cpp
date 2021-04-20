@@ -8,7 +8,7 @@
 char ssid[33];
 char password[65];
 WiFiClient espClient;
-char myHostname[16] = "PrivateHomeIoTE";
+char myHostname[6] = "home1";
 unsigned long lastConnectTry = 0;
 bool firstBoot = false;
 boolean connect;

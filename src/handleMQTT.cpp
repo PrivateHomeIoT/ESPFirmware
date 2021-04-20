@@ -18,8 +18,7 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encryptFromChar(myHostname));
-      client.publish((char*)("home/status/" + (String)myHostname).c_str(), encryptFromChar((char*)"online"));
+      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encryptFromChar(myHostname,6));
       client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
       } else {
@@ -41,10 +40,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
   char* iv = (char*)"";
 
   for (unsigned int i = 0; i < length; i++) {
-    if(i<16) iv[i] = payload[i];
+    if(i<16) iv[i] = payload[i]; 
     else msg[i-16] = (char)payload[i];
   }
-  char* decrypted = decryptToChar(msg,iv);
+  char* decrypted = decryptToChar(msg, iv, length-16);
 
   Serial.println(decrypted);
   if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypted);
