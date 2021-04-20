@@ -30,7 +30,7 @@ void actPort(uint8_t port, uint8_t value){
     }
 }  
 
-void configPorts(char* msg){
+void configPorts(char* msg, uint length){
     Serial.println("Setupdata received:");
     Serial.println(msg);
     
@@ -39,7 +39,7 @@ void configPorts(char* msg){
     filter["outputs"] = true;
     filter["inputs"] = true;
     StaticJsonDocument<192> doc;
-    DeserializationError error = deserializeJson(doc, msg, sizeof(msg), DeserializationOption::Filter(filter));
+    DeserializationError error = deserializeJson(doc, msg, length, DeserializationOption::Filter(filter));
 
     if (error) {
         Serial.print(F("deserializeJson() failed: "));
@@ -47,7 +47,8 @@ void configPorts(char* msg){
         return;
     }
 
-    randomCode = doc["randomCode"]; // "1234567890"
+    const char* codeR = doc["randomCode"]; // "1234567890"
+    randomCode = (String)codeR;
     uint next = 0;
     for (JsonObject elem : doc["outputs"].as<JsonArray>()) {
         uint8_t pin = (uint8_t)elem["pin"]; // 0, 1

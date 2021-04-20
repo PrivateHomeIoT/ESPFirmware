@@ -6,6 +6,6 @@ extern uint8_t outputs[64];
 extern uint8_t inputs[64];
 
 void actPort(char* msg);
-void configPorts(char* msg);
+void configPorts(char* msg, uint length);
 
 #endif

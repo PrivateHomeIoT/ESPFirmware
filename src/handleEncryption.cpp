@@ -27,19 +27,15 @@ void setupKey(){
   else Serial.println("Key setup failed");
 }
 
-char* decryptToChar(char* input, char* iv, uint length){
-  uint8_t convertedInput[length];
-  for(uint i = 0; i<length; i++) convertedInput[i] = (uint8_t)input[i];
-  uint8_t convertedIV[16];
-  for(uint i = 0; i<length; i++) convertedIV[i] = (uint8_t)iv[i];
-
-  aesCBC.setIV(convertedIV, sizeof(convertedIV));
-  uint8_t* decryptedRaw;
-  aesCBC.decrypt(decryptedRaw, convertedInput, sizeof(convertedInput));
-
-  uint range = sizeof(decryptedRaw)-decryptedRaw[sizeof(decryptedRaw)-1];
-  char decrypted[range];
-  for(uint i = 0; i<sizeof(range); i++) decrypted[i] = (char)decryptedRaw[i];
+String decryptToChar(uint8_t* msg, uint8_t* iv, uint length){
+  aesCBC.setIV(iv, 16);
+  uint8_t decryptedRaw[length];
+  aesCBC.decrypt(decryptedRaw, msg, length);
+  uint range = length-(decryptedRaw[length-1]%16);
+  printArray(decryptedRaw, length);
+  Serial.println(range);
+  String decrypted;
+  for(uint i = 0; i<range; i++) decrypted += (char)decryptedRaw[i];
   Serial.println("decrypted message: "+ (String)decrypted);
   return decrypted;
 }
@@ -48,9 +44,11 @@ char* encryptFromChar(char* input, uint length){
   Serial.println(length);
   uint ciphersize=((length/16)+1)*16;
   uint8_t convertedInput[ciphersize];
-  for(uint i = 0; i<length; i++) convertedInput[i] = (uint8_t)input[i];
-  uint paddingValue = 16-length%16;
-  for(uint i = length; i < length; i++) convertedInput[i] = paddingValue;
+
+  for(uint i = 0; i<length-1; i++) convertedInput[i] = (uint8_t)input[i];
+  uint paddingValue = 16-((length-1)%16);
+  for(uint i = length-1; i < ciphersize; i++) convertedInput[i] = paddingValue;
+
   Serial.print("converted Input: ");
   printArray(convertedInput, ciphersize);
   uint8_t iv[16];
@@ -67,8 +65,8 @@ char* encryptFromChar(char* input, uint length){
   uint8_t encryptedRaw[ciphersize];
   aesCBC.encrypt(encryptedRaw, convertedInput, ciphersize);
   
-  char encrypted[ciphersize];
-  for(uint i = 0; i<length; i++) encrypted[i] = (char)encryptedRaw[i];
+  // char encrypted[ciphersize];
+  // for(uint i = 0; i<length; i++) encrypted[i] = (char)encryptedRaw[i];
 
   Serial.print("encrypted message: ");
   String msgString = printArray(encryptedRaw, ciphersize);
