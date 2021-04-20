@@ -58,13 +58,14 @@ void serialLoop(){
             Serial.println("SUCCESS");
         }
         if(setKey) {
-            aes_key[0]= (byte)atoi(strtok((char*)rawString.c_str(), ","));
+            aes_key[0]= (uint8_t)atoi(strtok((char*)rawString.c_str(), ","));
             Serial.println((int)aes_key[0]);
             for(uint i = 1; i<16; i++){
-                aes_key[i] = (byte)atoi(strtok(NULL, ","));
+                aes_key[i] = (uint8_t)atoi(strtok(NULL, ","));
                 Serial.println((int)aes_key[i]);
             }
             setKey = false;
+            setupKey();
             saveData();
             Serial.println("SUCCESS");
             }
@@ -90,7 +91,9 @@ void loadData(){
     EEPROM.get(0 + sizeof(ssid), password);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
+    Serial.println("test1");
     for(uint i = 0; i<16; i++) EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) +i, aes_key[i]);
+    Serial.println("test2");
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 16,ok);
     EEPROM.end();
     if (String(ok) != String("OK")){

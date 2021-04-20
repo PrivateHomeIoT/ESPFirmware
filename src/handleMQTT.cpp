@@ -18,8 +18,8 @@ void connectMQTT() {
     // Attempt to connect
     if (client.connect(myHostname)) {
       Serial.println("connected");
-      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encrypt(myHostname));
-      client.publish((char*)("home/status/" + (String)myHostname).c_str(), encrypt((char*)"online"));
+      client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encryptFromChar(myHostname));
+      client.publish((char*)("home/status/" + (String)myHostname).c_str(), encryptFromChar((char*)"online"));
       //Serial.println("Published first MQTT-message: "+ (String)encrypt((char*)"online"));
       client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
@@ -39,15 +39,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print(topic);
   Serial.print("] ");
   char *msg = (char*)"";
+  char* iv = (char*)"";
 
   for (unsigned int i = 0; i < length; i++) {
-    //Serial.print((char)payload[i]);
-    if(i<16) aes_iv[i] = payload[i];
+    if(i<16) iv[i] = payload[i];
     else msg[i-16] = (char)payload[i];
   }
-  Serial.println(decrypt(msg));
-  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypt(msg));
-  if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(decrypt(msg));
+  char* decrypted = decryptToChar(msg,iv);
+
+  Serial.println(decrypted);
+  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort(decrypted);
+  if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts(decrypted);
 }
 
 void loopMQTT() {

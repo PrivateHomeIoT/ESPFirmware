@@ -1,18 +1,17 @@
 #ifndef handleEncryption_h
 #define handleEncryption_h
 
-#include <AESLib.h>
 #include <Arduino.h>
+#include <Crypto.h>
+#include <CryptoLegacy.h>
+#include <AES.h>
+#include <CBC.h>
 
-extern char keyRaw[16];
-extern char ivRaw[16];
-extern byte aes_key[];
-extern byte aes_iv[N_BLOCK];
+extern uint8_t aes_key[16];
+extern char aes_iv[16];
 
-void decodeKEY(char base64[16]);
-void decodeIV(char base64[16]);
-void getNewIV();
-char* decrypt(char* text);
-char* encrypt(char* text);
+void setupKey();
+char* decryptToChar(char* input, char* iv);
+char* encryptFromChar(char* input);
 
 #endif
