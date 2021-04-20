@@ -20,7 +20,6 @@ void connectMQTT() {
       Serial.println("connected");
       client.publish((char*)("home/setupRequest/" + (String)myHostname).c_str(), encryptFromChar(myHostname));
       client.publish((char*)("home/status/" + (String)myHostname).c_str(), encryptFromChar((char*)"online"));
-      //Serial.println("Published first MQTT-message: "+ (String)encrypt((char*)"online"));
       client.subscribe(((char*)("home/setup/" + (String)myHostname).c_str()));
       client.subscribe((char*)("home/switch/cmd/" + (String)randomCode).c_str());
       } else {

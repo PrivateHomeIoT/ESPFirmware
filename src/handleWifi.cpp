@@ -5,8 +5,8 @@
 #include "handleWifi.h"
 #include "handleData.h"
 
-char ssid[33] = "";
-char password[65] = "";
+char ssid[33];
+char password[65];
 WiFiClient espClient;
 char myHostname[16] = "PrivateHomeIoTE";
 unsigned long lastConnectTry = 0;
@@ -19,7 +19,7 @@ void wifiSetup(){
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
 
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED && ssid[0] != NULL) {
         delay(500);
         Serial.print(".");
     }
@@ -40,7 +40,6 @@ void wifiLoop(){
         unsigned int s = WiFi.status();
         if (s == 0 && millis() > (lastConnectTry + 60000)){
             /* If WLAN disconnected and idle try to connect */
-            /* Don't set retry time too low as retry interfere the softAP operation */
             connect = true;
         }
         if (WiFi.status() != s){ // WLAN status change
