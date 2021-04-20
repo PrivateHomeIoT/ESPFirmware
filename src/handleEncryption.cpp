@@ -10,6 +10,14 @@ CBC<AES128> aesCBC;
 uint8_t aes_key[16];
 char aes_iv[16];
 
+void printArray(uint8_t input[], uint length){
+  for(uint i= 0; i< length; i++) {
+    Serial.print(input[i], HEX);
+    Serial.print((char*)",");
+  }
+  Serial.println();
+}
+
 void setupKey(){
   if(aesCBC.setKey(aes_key, sizeof(aes_key))) Serial.println("Key setup was successful");
   else Serial.println("Key setup failed");
@@ -38,19 +46,22 @@ char* encryptFromChar(char* input){
   uint paddingValue = 16-sizeof(convertedInput)%16;
   for(uint i = sizeof(input); i < sizeof(convertedInput); i++) convertedInput[i] = paddingValue;
   uint8_t iv[16];
-  for(uint i = 0; i<sizeof(input); i++){
+  for(uint i = 0; i<16; i++){
     iv[i] = (uint8_t)ESP8266TrueRandom.random(0,255);
     aes_iv[i] = (char)iv[i];
   }
 
-  aesCBC.setIV(iv, sizeof(iv));
+  aesCBC.setIV(iv, 16);
   uint8_t encryptedRaw[sizeof(convertedInput)];
   aesCBC.encrypt(encryptedRaw, convertedInput, sizeof(convertedInput));
   
   char encrypted[sizeof(input)];
-  for(uint i = 0; i<sizeof(encryptedRaw); i++) encrypted[i] = (char)encryptedRaw[i];
-  Serial.println("IV: "+ (String)aes_iv);
-  Serial.println("encrypted message: "+ (String)encrypted);
+  for(uint i = 0; i<sizeof(input); i++) encrypted[i] = (char)encryptedRaw[i];
+
+  Serial.print("IV: ");
+  printArray(iv, 16);
+  Serial.print("encrypted message: ");
+  printArray(encryptedRaw, sizeof(encryptedRaw));
 
   char result[sizeof(aes_iv)+sizeof(encrypted)];
   strcpy(result, aes_iv);

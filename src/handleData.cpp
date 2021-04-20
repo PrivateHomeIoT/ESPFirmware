@@ -92,6 +92,7 @@ void loadData(){
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
     for(uint i = 0; i<16; i++) EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) +i, aes_key[i]);
+    // Serial.println("test");
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 16,ok);
     EEPROM.end();
     if (String(ok) != String("OK")){
