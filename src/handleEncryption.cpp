@@ -10,12 +10,16 @@ CBC<AES128> aesCBC;
 uint8_t aes_key[16];
 char aes_iv[16];
 
-void printArray(uint8_t input[], uint length){
+String printArray(uint8_t input[], uint length){
+  String result;
   for(uint i= 0; i< length; i++) {
     Serial.print(input[i], HEX);
     Serial.print((char*)",");
+    result += (uint)input[i];
+    result += ",";
   }
   Serial.println();
+  return result;
 }
 
 void setupKey(){
@@ -59,12 +63,13 @@ char* encryptFromChar(char* input){
   for(uint i = 0; i<sizeof(input); i++) encrypted[i] = (char)encryptedRaw[i];
 
   Serial.print("IV: ");
-  printArray(iv, 16);
+  String ivString = printArray(iv, 16);
+  Serial.println(ivString);
   Serial.print("encrypted message: ");
-  printArray(encryptedRaw, sizeof(encryptedRaw));
+  String msgString = printArray(encryptedRaw, sizeof(encryptedRaw));
+  Serial.println(msgString);
 
-  char result[sizeof(aes_iv)+sizeof(encrypted)];
-  strcpy(result, aes_iv);
-  strcpy(result, encrypted);
-  return result;
+  ivString += msgString;
+  Serial.println(ivString);
+  return (char*)ivString.c_str();
 }
