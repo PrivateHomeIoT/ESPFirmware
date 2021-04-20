@@ -91,9 +91,7 @@ void loadData(){
     EEPROM.get(0 + sizeof(ssid), password);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password), myHostname);
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname), mqtt_server);
-    Serial.println("test1");
     for(uint i = 0; i<16; i++) EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) +i, aes_key[i]);
-    Serial.println("test2");
     EEPROM.get(0 + sizeof(ssid) + sizeof(password) + sizeof(myHostname) + sizeof(mqtt_server) + 16,ok);
     EEPROM.end();
     if (String(ok) != String("OK")){
@@ -102,13 +100,7 @@ void loadData(){
         firstBoot = true;
     }
     if (firstBoot) Serial.println("No data found...");
-    // Serial.println("Recovered credentials:");
-    // Serial.println(ssid);
-    // Serial.println(strlen(password) > 0 ? "********" : "<no password>");
     if(sizeof(ssid)>0) firstBoot = false;
-    // Serial.println("Finished loading data");
-    // Serial.println(mqtt_server);
-    // Serial.println(myHostname);
     setupMQTT();
     Serial.println("Finished with recovering data...");
 }
