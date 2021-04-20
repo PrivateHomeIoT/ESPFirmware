@@ -47,8 +47,9 @@ void configPorts(char* msg, uint length){
         return;
     }
 
-    const char* codeR = doc["randomCode"]; // "1234567890"
+    const char* codeR = doc["randomCode"]; 
     randomCode = (String)codeR;
+    client.subscribe((char*)("home/switch/cmd/" + randomCode).c_str());
     uint next = 0;
     for (JsonObject elem : doc["outputs"].as<JsonArray>()) {
         uint8_t pin = (uint8_t)elem["pin"]; // 0, 1

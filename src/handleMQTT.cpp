@@ -6,7 +6,7 @@
 
 char mqtt_server[17] = "192.168.178.136";
 int mqtt_port = 1500;
-String randomCode = "1234567890";
+String randomCode = "";
 PubSubClient client(espClient);
 
 void connectMQTT() {
@@ -24,7 +24,6 @@ void connectMQTT() {
       client.publish((char*)("home/setupRequest/" + hostname).c_str(), encryptFromChar(myHostname,6));
       Serial.println(((char*)("home/setup/" + hostname).c_str()));
       client.subscribe(((char*)("home/setup/") + hostname).c_str());
-      client.subscribe((char*)("home/switch/cmd/" + randomCode).c_str());
       } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -49,7 +48,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
   String decrypted = decryptToChar(msg, iv, length-16);
   Serial.println(decrypted);
-  if(strcmp(topic, (char*)("home/switch/cmd/" + (String)randomCode).c_str()) == 0) actPort((char*)decrypted.c_str());
+  if(strcmp(topic, (char*)("home/switch/cmd/" + randomCode).c_str()) == 0) actPort((char*)decrypted.c_str());
   if(strcmp(topic, (char*)("home/setup/" + (String)myHostname).c_str()) == 0) configPorts((char*)decrypted.c_str(), decrypted.length());
 }
 
