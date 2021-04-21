@@ -33,7 +33,7 @@ String decryptToChar(uint8_t* msg, uint8_t* iv, uint length){
   aesCBC.decrypt(decryptedRaw, msg, length);
   uint range = length-(decryptedRaw[length-1]%16);
   printArray(decryptedRaw, length);
-  Serial.println(range);
+  // Serial.println(range);
   String decrypted;
   for(uint i = 0; i<range; i++) decrypted += (char)decryptedRaw[i];
   Serial.println("decrypted message: "+ (String)decrypted);
@@ -59,7 +59,7 @@ char* encryptFromChar(char* input, uint length){
 
   Serial.print("IV: ");
   String ivString = printArray(iv, 16);
-  Serial.println(ivString);
+  // Serial.println(ivString);
 
   aesCBC.setIV(iv, 16);
   uint8_t encryptedRaw[ciphersize];
@@ -70,9 +70,9 @@ char* encryptFromChar(char* input, uint length){
 
   Serial.print("encrypted message: ");
   String msgString = printArray(encryptedRaw, ciphersize);
-  Serial.println(msgString);
+  // Serial.println(msgString);
 
   ivString += msgString;
-  Serial.println(ivString);
+  // Serial.println(ivString);
   return (char*)ivString.c_str();
 }

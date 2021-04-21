@@ -105,8 +105,9 @@ void loadData(){
         firstBoot = false;
         setupKey();
     }
-    setupMQTT();
     Serial.println("Finished with recovering data...");
+    delay(100);
+    setupMQTT();
 }
 
 void saveData(){
